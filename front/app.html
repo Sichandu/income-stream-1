@@ -29,7 +29,6 @@
       flex-direction: column;
     }
 
-    /* TOP BAR */
     .topbar {
       height: 56px;
       background: var(--ink);
@@ -41,13 +40,7 @@
       z-index: 10;
     }
 
-    .topbar-logo {
-      font-family: 'Fraunces', serif;
-      font-size: 20px;
-      color: white;
-      text-decoration: none;
-    }
-
+    .topbar-logo { font-family: 'Fraunces', serif; font-size: 20px; color: white; text-decoration: none; }
     .topbar-logo span { color: var(--primary); }
 
     .topbar-actions { display: flex; align-items: center; gap: 12px; }
@@ -64,15 +57,9 @@
       transition: all 0.2s;
     }
 
-    .btn-publish:hover { background: #e04400; transform: translateY(-1px); }
+    .btn-publish:hover { background: #e04400; }
+    .btn-publish:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    .step-indicator {
-      font-size: 12px;
-      color: rgba(255,255,255,0.5);
-      font-weight: 500;
-    }
-
-    /* MAIN LAYOUT */
     .builder {
       display: grid;
       grid-template-columns: var(--sidebar) 1fr;
@@ -80,7 +67,6 @@
       overflow: hidden;
     }
 
-    /* SIDEBAR */
     .sidebar {
       background: var(--card);
       border-right: 1px solid var(--border);
@@ -90,15 +76,9 @@
     }
 
     .sidebar::-webkit-scrollbar { width: 4px; }
-    .sidebar::-webkit-scrollbar-track { background: transparent; }
     .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-    /* TABS */
-    .tabs {
-      display: flex;
-      border-bottom: 1px solid var(--border);
-      flex-shrink: 0;
-    }
+    .tabs { display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0; }
 
     .tab {
       flex: 1;
@@ -112,15 +92,11 @@
       transition: all 0.2s;
     }
 
-    .tab.active {
-      color: var(--ink);
-      border-bottom-color: var(--primary);
-    }
+    .tab.active { color: var(--ink); border-bottom-color: var(--primary); }
 
     .tab-content { display: none; padding: 20px; flex: 1; }
     .tab-content.active { display: block; }
 
-    /* FORM ELEMENTS */
     .field { margin-bottom: 18px; }
 
     .field label {
@@ -149,13 +125,19 @@
     .field input:focus, .field textarea:focus { border-color: var(--primary); }
     .field textarea { resize: vertical; min-height: 70px; }
 
-    /* THEMES */
-    .themes-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 8px;
-      margin-bottom: 20px;
+    .username-row { position: relative; }
+
+    .username-status {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
     }
+
+    .field-hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+    .themes-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 20px; }
 
     .theme-dot {
       aspect-ratio: 1;
@@ -168,7 +150,6 @@
     .theme-dot.active { border-color: var(--ink); transform: scale(1.15); }
     .theme-dot:hover { transform: scale(1.1); }
 
-    /* LINKS */
     .links-list { margin-bottom: 16px; }
 
     .link-item {
@@ -198,14 +179,12 @@
 
     .link-remove {
       position: absolute;
-      top: 8px;
-      right: 8px;
+      top: 8px; right: 8px;
       background: none;
       border: none;
       cursor: pointer;
       color: var(--muted);
       font-size: 16px;
-      line-height: 1;
       padding: 2px;
     }
 
@@ -226,9 +205,6 @@
 
     .btn-add-link:hover { border-color: var(--primary); color: var(--primary); }
 
-    /* SPECIAL BUTTONS */
-    .special-section { margin-bottom: 20px; }
-
     .special-title {
       font-size: 11px;
       font-weight: 700;
@@ -236,6 +212,7 @@
       letter-spacing: 0.1em;
       color: var(--muted);
       margin-bottom: 10px;
+      margin-top: 8px;
     }
 
     .toggle-row {
@@ -249,13 +226,7 @@
     .toggle-label { font-size: 14px; font-weight: 500; }
     .toggle-sub { font-size: 11px; color: var(--muted); }
 
-    .toggle {
-      position: relative;
-      width: 40px;
-      height: 22px;
-      flex-shrink: 0;
-    }
-
+    .toggle { position: relative; width: 40px; height: 22px; flex-shrink: 0; }
     .toggle input { opacity: 0; width: 0; height: 0; }
 
     .toggle-slider {
@@ -270,10 +241,8 @@
     .toggle-slider::before {
       content: '';
       position: absolute;
-      width: 16px;
-      height: 16px;
-      left: 3px;
-      bottom: 3px;
+      width: 16px; height: 16px;
+      left: 3px; bottom: 3px;
       background: white;
       border-radius: 50%;
       transition: 0.2s;
@@ -282,11 +251,7 @@
     .toggle input:checked + .toggle-slider { background: var(--primary); }
     .toggle input:checked + .toggle-slider::before { transform: translateX(18px); }
 
-    .toggle-input-wrap {
-      margin-top: 8px;
-      display: none;
-    }
-
+    .toggle-input-wrap { margin-top: 8px; display: none; }
     .toggle-input-wrap.active { display: block; }
 
     .toggle-input-wrap input {
@@ -301,7 +266,7 @@
       outline: none;
     }
 
-    /* PREVIEW PANEL */
+    /* PREVIEW */
     .preview-panel {
       display: flex;
       flex-direction: column;
@@ -310,7 +275,6 @@
       background: var(--bg);
       padding: 32px;
       overflow: hidden;
-      position: relative;
     }
 
     .preview-label {
@@ -322,24 +286,20 @@
       margin-bottom: 24px;
     }
 
-    /* PHONE MOCKUP */
     .phone-mockup {
       width: 280px;
       background: #1a1a1a;
       border-radius: 40px;
       padding: 14px;
-      box-shadow: 0 40px 80px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.05);
-      position: relative;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.25);
     }
 
     .phone-notch {
-      width: 80px;
-      height: 24px;
+      width: 80px; height: 24px;
       background: #1a1a1a;
       border-radius: 0 0 16px 16px;
       position: absolute;
-      top: 14px;
-      left: 50%;
+      top: 14px; left: 50%;
       transform: translateX(-50%);
       z-index: 2;
     }
@@ -365,8 +325,7 @@
     #preview-page::-webkit-scrollbar { display: none; }
 
     .preview-avatar {
-      width: 72px;
-      height: 72px;
+      width: 72px; height: 72px;
       border-radius: 50%;
       background: rgba(255,255,255,0.2);
       display: flex;
@@ -377,21 +336,8 @@
       border: 3px solid rgba(255,255,255,0.3);
     }
 
-    .preview-name {
-      font-size: 16px;
-      font-weight: 800;
-      color: white;
-      margin-bottom: 4px;
-      text-align: center;
-    }
-
-    .preview-bio {
-      font-size: 12px;
-      color: rgba(255,255,255,0.75);
-      text-align: center;
-      margin-bottom: 20px;
-      line-height: 1.5;
-    }
+    .preview-name { font-size: 16px; font-weight: 800; color: white; margin-bottom: 4px; text-align: center; }
+    .preview-bio { font-size: 12px; color: rgba(255,255,255,0.75); text-align: center; margin-bottom: 20px; line-height: 1.5; }
 
     .preview-link {
       width: 100%;
@@ -405,100 +351,33 @@
       color: white;
       border: 1px solid rgba(255,255,255,0.25);
       cursor: pointer;
-      transition: background 0.2s;
       text-decoration: none;
       display: block;
     }
 
-    .preview-link:hover { background: rgba(255,255,255,0.3); }
     .preview-link.whatsapp { background: #25D366; border-color: #25D366; }
     .preview-link.upi { background: #6739b7; border-color: #6739b7; }
 
-    .preview-footer {
-      margin-top: auto;
-      padding-top: 16px;
-      font-size: 10px;
-      color: rgba(255,255,255,0.4);
-      text-align: center;
-    }
+    .preview-footer { margin-top: auto; padding-top: 16px; font-size: 10px; color: rgba(255,255,255,0.4); text-align: center; }
 
-    /* PAYWALL MODAL */
-    .modal-overlay {
+    /* TOAST */
+    .toast {
       position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      backdrop-filter: blur(4px);
-    }
-
-    .modal-overlay.active { display: flex; }
-
-    .modal {
-      background: white;
-      border-radius: 24px;
-      padding: 48px 40px;
-      max-width: 440px;
-      width: 90%;
-      text-align: center;
-      animation: popIn 0.3s ease;
-    }
-
-    @keyframes popIn {
-      from { opacity: 0; transform: scale(0.9) translateY(20px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    .modal-icon { font-size: 48px; margin-bottom: 16px; }
-    .modal h2 { font-family: 'Fraunces', serif; font-size: 28px; margin-bottom: 8px; }
-    .modal p { color: var(--muted); font-size: 15px; line-height: 1.6; margin-bottom: 28px; }
-
-    .modal-features {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 28px;
-      text-align: left;
-    }
-
-    .modal-feature {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 14px;
-    }
-
-    .modal-feature::before { content: '✓'; color: var(--secondary); font-weight: 700; }
-
-    .btn-modal-pay {
-      width: 100%;
-      padding: 16px;
-      background: var(--primary);
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--ink);
       color: white;
-      font-size: 16px;
-      font-weight: 700;
-      border: none;
+      padding: 12px 24px;
       border-radius: 100px;
-      cursor: pointer;
-      text-decoration: none;
-      display: block;
-      transition: all 0.2s;
-      box-shadow: 0 8px 24px rgba(255,77,0,0.3);
-      margin-bottom: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: transform 0.3s ease;
+      z-index: 999;
     }
 
-    .btn-modal-pay:hover { transform: translateY(-2px); }
-
-    .btn-modal-cancel {
-      background: none;
-      border: none;
-      font-size: 13px;
-      color: var(--muted);
-      cursor: pointer;
-      text-decoration: underline;
-    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.error { background: #e53e3e; }
 
     @media (max-width: 768px) {
       .builder { grid-template-columns: 1fr; }
@@ -509,158 +388,140 @@
 </head>
 <body>
 
-  <!-- TOP BAR -->
-  <div class="topbar">
-    <a href="index.html" class="topbar-logo">Link<span>Desi</span></a>
-    <div class="topbar-actions">
-      <span class="step-indicator">Builder</span>
-      <button class="btn-publish" onclick="openPublishModal()">Publish — ₹199/mo</button>
+<div class="topbar">
+  <a href="index.html" class="topbar-logo">Link<span>Desi</span></a>
+  <div class="topbar-actions">
+    <button class="btn-publish" id="publish-btn" onclick="saveAndPublish()">Publish — ₹149/mo</button>
+  </div>
+</div>
+
+<div class="builder">
+  <div class="sidebar">
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('profile')">👤 Profile</div>
+      <div class="tab" onclick="switchTab('links')">🔗 Links</div>
+      <div class="tab" onclick="switchTab('design')">🎨 Design</div>
+    </div>
+
+    <!-- PROFILE TAB -->
+    <div class="tab-content active" id="tab-profile">
+      <div class="field">
+        <label>Username <span style="color:var(--primary)">*</span></label>
+        <div class="username-row">
+          <input type="text" id="f-username" placeholder="e.g. priyamusic"
+            oninput="onUsernameInput()" style="padding-right:36px" />
+          <span class="username-status" id="username-status"></span>
+        </div>
+        <div class="field-hint">Your page: <strong>linkdesi.in/<span id="username-preview">yourname</span></strong></div>
+      </div>
+      <div class="field">
+        <label>Display Name <span style="color:var(--primary)">*</span></label>
+        <input type="text" id="f-name" placeholder="e.g. Priya Sharma" oninput="updatePreview()" />
+      </div>
+      <div class="field">
+        <label>Bio</label>
+        <textarea id="f-bio" placeholder="e.g. Singer & Songwriter from Mumbai 🎵" oninput="updatePreview()"></textarea>
+      </div>
+      <div class="field">
+        <label>Profile Emoji</label>
+        <input type="text" id="f-emoji" placeholder="e.g. 🎵 or 📸 or 🍳" maxlength="2" oninput="updatePreview()" />
+      </div>
+
+      <div class="special-title">⚡ Special Indian Buttons</div>
+
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">💸 UPI Payment</div>
+          <div class="toggle-sub">Let followers pay you directly</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggle-upi" onchange="toggleSpecial('upi')" />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="toggle-input-wrap" id="wrap-upi">
+        <input type="text" id="f-upi" placeholder="your@upi or 9876543210@paytm" oninput="updatePreview()" />
+      </div>
+
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">📱 WhatsApp Button</div>
+          <div class="toggle-sub">Direct chat link</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggle-wa" onchange="toggleSpecial('wa')" />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="toggle-input-wrap" id="wrap-wa">
+        <input type="text" id="f-wa" placeholder="10-digit mobile number" oninput="updatePreview()" />
+      </div>
+    </div>
+
+    <!-- LINKS TAB -->
+    <div class="tab-content" id="tab-links">
+      <div class="links-list" id="links-list"></div>
+      <button class="btn-add-link" onclick="addLink()">+ Add Link</button>
+    </div>
+
+    <!-- DESIGN TAB -->
+    <div class="tab-content" id="tab-design">
+      <div class="field">
+        <label>Theme</label>
+        <div class="themes-grid" id="themes-grid"></div>
+      </div>
     </div>
   </div>
 
-  <div class="builder">
-
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-      <div class="tabs">
-        <div class="tab active" onclick="switchTab('profile')">👤 Profile</div>
-        <div class="tab" onclick="switchTab('links')">🔗 Links</div>
-        <div class="tab" onclick="switchTab('design')">🎨 Design</div>
-      </div>
-
-      <!-- PROFILE TAB -->
-      <div class="tab-content active" id="tab-profile">
-        <div class="field">
-          <label>Display Name</label>
-          <input type="text" id="f-name" placeholder="e.g. Priya Sharma" oninput="updatePreview()" />
-        </div>
-        <div class="field">
-          <label>Bio</label>
-          <textarea id="f-bio" placeholder="e.g. Singer & Songwriter from Mumbai 🎵" oninput="updatePreview()"></textarea>
-        </div>
-        <div class="field">
-          <label>Profile Emoji / Avatar</label>
-          <input type="text" id="f-emoji" placeholder="e.g. 🎵 or 📸 or 🍳" maxlength="2" oninput="updatePreview()" />
-        </div>
-        <div class="field">
-          <label>Your Username</label>
-          <input type="text" id="f-username" placeholder="e.g. priyamusic" oninput="updatePreview()" />
-          <div style="font-size:11px; color:var(--muted); margin-top:4px;">Your page: linkdesi.in/<span id="username-preview">yourname</span></div>
-        </div>
-
-        <!-- SPECIAL BUTTONS -->
-        <div class="special-section">
-          <div class="special-title">⚡ Special Indian Buttons</div>
-
-          <div class="toggle-row">
-            <div>
-              <div class="toggle-label">💸 UPI Payment</div>
-              <div class="toggle-sub">Let followers pay you directly</div>
-            </div>
-            <label class="toggle">
-              <input type="checkbox" id="toggle-upi" onchange="toggleSpecial('upi')" />
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
-          <div class="toggle-input-wrap" id="wrap-upi">
-            <input type="text" id="f-upi" placeholder="your@upi or 9876543210@paytm" oninput="updatePreview()" />
-          </div>
-
-          <div class="toggle-row">
-            <div>
-              <div class="toggle-label">📱 WhatsApp Button</div>
-              <div class="toggle-sub">Direct chat link</div>
-            </div>
-            <label class="toggle">
-              <input type="checkbox" id="toggle-wa" onchange="toggleSpecial('wa')" />
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
-          <div class="toggle-input-wrap" id="wrap-wa">
-            <input type="text" id="f-wa" placeholder="10-digit mobile number" oninput="updatePreview()" />
-          </div>
+  <!-- PREVIEW -->
+  <div class="preview-panel">
+    <div class="preview-label">Live Preview</div>
+    <div class="phone-mockup" style="position:relative">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div id="preview-page">
+          <div class="preview-avatar" id="prev-avatar">😊</div>
+          <div class="preview-name" id="prev-name">Your Name</div>
+          <div class="preview-bio" id="prev-bio">Your bio goes here</div>
+          <div id="prev-links"></div>
+          <div class="preview-footer">linkdesi.in/yourname</div>
         </div>
       </div>
-
-      <!-- LINKS TAB -->
-      <div class="tab-content" id="tab-links">
-        <div class="links-list" id="links-list"></div>
-        <button class="btn-add-link" onclick="addLink()">+ Add Link</button>
-      </div>
-
-      <!-- DESIGN TAB -->
-      <div class="tab-content" id="tab-design">
-        <div class="field">
-          <label>Theme</label>
-          <div class="themes-grid" id="themes-grid"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PREVIEW -->
-    <div class="preview-panel">
-      <div class="preview-label">Live Preview</div>
-      <div class="phone-mockup">
-        <div class="phone-notch"></div>
-        <div class="phone-screen">
-          <div id="preview-page">
-            <div class="preview-avatar" id="prev-avatar">😊</div>
-            <div class="preview-name" id="prev-name">Your Name</div>
-            <div class="preview-bio" id="prev-bio">Your bio goes here</div>
-            <div id="prev-links"></div>
-            <div class="preview-footer">linkdesi.in/yourname</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- PUBLISH MODAL -->
-  <div class="modal-overlay" id="modal-overlay">
-    <div class="modal">
-      <div class="modal-icon">🚀</div>
-      <h2>Publish Your Page</h2>
-      <p>Your page is ready! Pay ₹199/month to make it live and shareable.</p>
-      <div class="modal-features">
-        <div class="modal-feature">Live at linkdesi.in/<span id="modal-username">yourname</span></div>
-        <div class="modal-feature">UPI + WhatsApp buttons active</div>
-        <div class="modal-feature">Link click analytics</div>
-        <div class="modal-feature">Cancel anytime</div>
-      </div>
-      <!-- REPLACE with your Razorpay payment link -->
-      <a href="https://rzp.io/rzp/KAPs35a" class="btn-modal-pay" target="_blank">
-        Pay ₹149 & Go Live →
-      </a>
-      <button class="btn-modal-cancel" onclick="closeModal()">Not now</button>
     </div>
   </div>
+</div>
+
+<div class="toast" id="toast"></div>
 
 <script>
-  // THEMES
+  const API_BASE = "https://income-stream-1-1.onrender.com";
+  // REPLACE with your Razorpay payment link
+  const RAZORPAY_LINK = "https://rzp.io/rzp/KAPs35a";
+
   const themes = [
-    { bg: 'linear-gradient(135deg,#667eea,#764ba2)', name: 'Purple' },
-    { bg: 'linear-gradient(135deg,#f093fb,#f5576c)', name: 'Pink' },
-    { bg: 'linear-gradient(135deg,#4facfe,#00f2fe)', name: 'Blue' },
-    { bg: 'linear-gradient(135deg,#43e97b,#38f9d7)', name: 'Green' },
-    { bg: 'linear-gradient(135deg,#fa709a,#fee140)', name: 'Sunset' },
-    { bg: 'linear-gradient(135deg,#ff9a9e,#fecfef)', name: 'Rose' },
-    { bg: 'linear-gradient(135deg,#a18cd1,#fbc2eb)', name: 'Lavender' },
-    { bg: 'linear-gradient(135deg,#ffecd2,#fcb69f)', name: 'Peach' },
-    { bg: 'linear-gradient(135deg,#2d3436,#636e72)', name: 'Dark' },
-    { bg: 'linear-gradient(135deg,#ff4d00,#ff8c00)', name: 'Desi' },
+    { bg: 'linear-gradient(135deg,#667eea,#764ba2)' },
+    { bg: 'linear-gradient(135deg,#f093fb,#f5576c)' },
+    { bg: 'linear-gradient(135deg,#4facfe,#00f2fe)' },
+    { bg: 'linear-gradient(135deg,#43e97b,#38f9d7)' },
+    { bg: 'linear-gradient(135deg,#fa709a,#fee140)' },
+    { bg: 'linear-gradient(135deg,#ff9a9e,#fecfef)' },
+    { bg: 'linear-gradient(135deg,#a18cd1,#fbc2eb)' },
+    { bg: 'linear-gradient(135deg,#ffecd2,#fcb69f)' },
+    { bg: 'linear-gradient(135deg,#2d3436,#636e72)' },
+    { bg: 'linear-gradient(135deg,#ff4d00,#ff8c00)' },
   ];
 
   let currentTheme = 0;
   let links = [];
+  let usernameAvailable = false;
+  let usernameTimer = null;
 
-  // Build themes grid
+  // Build themes
   const grid = document.getElementById('themes-grid');
   themes.forEach((t, i) => {
     const dot = document.createElement('div');
     dot.className = 'theme-dot' + (i === 0 ? ' active' : '');
     dot.style.background = t.bg;
-    dot.title = t.name;
     dot.onclick = () => selectTheme(i);
     grid.appendChild(dot);
   });
@@ -671,14 +532,12 @@
     updatePreview();
   }
 
-  // TABS
   function switchTab(name) {
     document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', ['profile','links','design'][i] === name));
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
     document.getElementById('tab-' + name).classList.add('active');
   }
 
-  // LINKS
   function addLink() {
     const id = Date.now();
     links.push({ id, label: '', url: '' });
@@ -714,14 +573,36 @@
     updatePreview();
   }
 
-  // TOGGLES
   function toggleSpecial(type) {
     const checked = document.getElementById('toggle-' + type).checked;
     document.getElementById('wrap-' + type).classList.toggle('active', checked);
     updatePreview();
   }
 
-  // PREVIEW
+  // USERNAME CHECK
+  function onUsernameInput() {
+    const val = document.getElementById('f-username').value.trim().toLowerCase();
+    document.getElementById('username-preview').textContent = val || 'yourname';
+    document.getElementById('username-status').textContent = '';
+    usernameAvailable = false;
+    clearTimeout(usernameTimer);
+    if (val.length >= 3) {
+      usernameTimer = setTimeout(() => checkUsername(val), 600);
+    }
+    updatePreview();
+  }
+
+  async function checkUsername(username) {
+    try {
+      const res = await fetch(`${API_BASE}/check/${username}`);
+      const data = await res.json();
+      usernameAvailable = data.available;
+      document.getElementById('username-status').textContent = data.available ? '✅' : '❌';
+    } catch(e) {
+      console.error(e);
+    }
+  }
+
   function updatePreview() {
     const name    = document.getElementById('f-name').value || 'Your Name';
     const bio     = document.getElementById('f-bio').value || 'Your bio goes here';
@@ -736,7 +617,6 @@
     document.getElementById('prev-name').textContent = name;
     document.getElementById('prev-bio').textContent = bio;
     document.getElementById('preview-page').style.background = themes[currentTheme].bg;
-    document.getElementById('username-preview').textContent = username || 'yourname';
 
     const linksEl = document.getElementById('prev-links');
     linksEl.innerHTML = '';
@@ -755,8 +635,6 @@
       const a = document.createElement('a');
       a.className = 'preview-link whatsapp';
       a.textContent = '📱 WhatsApp Me';
-      a.href = `https://wa.me/91${wa.replace(/\D/g,'')}`;
-      a.target = '_blank';
       linksEl.appendChild(a);
     }
 
@@ -764,26 +642,71 @@
       const a = document.createElement('a');
       a.className = 'preview-link upi';
       a.textContent = '💸 Pay via UPI';
-      a.href = `upi://pay?pa=${upi}&pn=${encodeURIComponent(name)}`;
       linksEl.appendChild(a);
     }
   }
 
-  function openPublishModal() {
-    const username = document.getElementById('f-username').value || 'yourname';
-    document.getElementById('modal-username').textContent = username;
-    document.getElementById('modal-overlay').classList.add('active');
+  function showToast(msg, isError = false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast show' + (isError ? ' error' : '');
+    setTimeout(() => t.className = 'toast', 3000);
   }
 
-  function closeModal() {
-    document.getElementById('modal-overlay').classList.remove('active');
+  async function saveAndPublish() {
+    const username = document.getElementById('f-username').value.trim().toLowerCase();
+    const name     = document.getElementById('f-name').value.trim();
+    const upiOn    = document.getElementById('toggle-upi').checked;
+    const waOn     = document.getElementById('toggle-wa').checked;
+
+    if (!username || username.length < 3) return showToast('⚠ Enter a username (min 3 chars)', true);
+    if (!name) return showToast('⚠ Enter your display name', true);
+
+    const btn = document.getElementById('publish-btn');
+    btn.disabled = true;
+    btn.textContent = 'Saving...';
+
+    try {
+      const payload = {
+        username,
+        name,
+        bio: document.getElementById('f-bio').value,
+        emoji: document.getElementById('f-emoji').value || '😊',
+        theme_index: currentTheme,
+        links: links.filter(l => l.label).map(l => ({ label: l.label, url: l.url })),
+        upi_id: upiOn ? document.getElementById('f-upi').value : '',
+        whatsapp: waOn ? document.getElementById('f-wa').value : '',
+      };
+
+      const res = await fetch(`${API_BASE}/page`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.detail || 'Save failed');
+      }
+
+      showToast('✅ Saved! Redirecting to payment...');
+
+      // Store username so we can activate after payment
+      localStorage.setItem('pending_username', username);
+
+      // Redirect to Razorpay after short delay
+      setTimeout(() => {
+        window.location.href = RAZORPAY_LINK;
+      }, 1500);
+
+    } catch(e) {
+      showToast('⚠ ' + e.message, true);
+      btn.disabled = false;
+      btn.textContent = 'Publish — ₹149/mo';
+    }
   }
 
-  document.getElementById('modal-overlay').addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
-  });
-
-  // INIT
+  // Init
   addLink();
   updatePreview();
 </script>
