@@ -1,7 +1,5 @@
 fastapi
 uvicorn
-anthropic
+supabase
 pydantic
 python-dotenv
-pdfplumber
-python-multipart

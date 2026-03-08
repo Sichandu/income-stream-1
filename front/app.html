@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LinkDesi — Build Your Page</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:ital,wght@0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f5f3ef;
+      --ink: #0f0e0c;
+      --primary: #ff4d00;
+      --secondary: #00c896;
+      --border: #e0dbd2;
+      --card: #ffffff;
+      --muted: #8a8070;
+      --sidebar: 360px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* TOP BAR */
+    .topbar {
+      height: 56px;
+      background: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    .topbar-logo {
+      font-family: 'Fraunces', serif;
+      font-size: 20px;
+      color: white;
+      text-decoration: none;
+    }
+
+    .topbar-logo span { color: var(--primary); }
+
+    .topbar-actions { display: flex; align-items: center; gap: 12px; }
+
+    .btn-publish {
+      background: var(--primary);
+      color: white;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 20px;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-publish:hover { background: #e04400; transform: translateY(-1px); }
+
+    .step-indicator {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      font-weight: 500;
+    }
+
+    /* MAIN LAYOUT */
+    .builder {
+      display: grid;
+      grid-template-columns: var(--sidebar) 1fr;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      background: var(--card);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    /* TABS */
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 14px 8px;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      color: var(--muted);
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .tab.active {
+      color: var(--ink);
+      border-bottom-color: var(--primary);
+    }
+
+    .tab-content { display: none; padding: 20px; flex: 1; }
+    .tab-content.active { display: block; }
+
+    /* FORM ELEMENTS */
+    .field { margin-bottom: 18px; }
+
+    .field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .field input, .field textarea {
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--ink);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+      border-radius: 8px;
+      transition: border-color 0.2s;
+    }
+
+    .field input:focus, .field textarea:focus { border-color: var(--primary); }
+    .field textarea { resize: vertical; min-height: 70px; }
+
+    /* THEMES */
+    .themes-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .theme-dot {
+      aspect-ratio: 1;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .theme-dot.active { border-color: var(--ink); transform: scale(1.15); }
+    .theme-dot:hover { transform: scale(1.1); }
+
+    /* LINKS */
+    .links-list { margin-bottom: 16px; }
+
+    .link-item {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 8px;
+      position: relative;
+    }
+
+    .link-item input {
+      width: 100%;
+      padding: 7px 10px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--ink);
+      outline: none;
+      margin-bottom: 6px;
+    }
+
+    .link-item input:last-child { margin-bottom: 0; }
+    .link-item input:focus { border-color: var(--primary); }
+
+    .link-remove {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1;
+      padding: 2px;
+    }
+
+    .link-remove:hover { color: var(--primary); }
+
+    .btn-add-link {
+      width: 100%;
+      padding: 10px;
+      background: transparent;
+      border: 2px dashed var(--border);
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-add-link:hover { border-color: var(--primary); color: var(--primary); }
+
+    /* SPECIAL BUTTONS */
+    .special-section { margin-bottom: 20px; }
+
+    .special-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .toggle-label { font-size: 14px; font-weight: 500; }
+    .toggle-sub { font-size: 11px; color: var(--muted); }
+
+    .toggle {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+
+    .toggle input { opacity: 0; width: 0; height: 0; }
+
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: var(--border);
+      border-radius: 22px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      left: 3px;
+      bottom: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: 0.2s;
+    }
+
+    .toggle input:checked + .toggle-slider { background: var(--primary); }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(18px); }
+
+    .toggle-input-wrap {
+      margin-top: 8px;
+      display: none;
+    }
+
+    .toggle-input-wrap.active { display: block; }
+
+    .toggle-input-wrap input {
+      width: 100%;
+      padding: 8px 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--ink);
+      outline: none;
+    }
+
+    /* PREVIEW PANEL */
+    .preview-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      padding: 32px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .preview-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    /* PHONE MOCKUP */
+    .phone-mockup {
+      width: 280px;
+      background: #1a1a1a;
+      border-radius: 40px;
+      padding: 14px;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.05);
+      position: relative;
+    }
+
+    .phone-notch {
+      width: 80px;
+      height: 24px;
+      background: #1a1a1a;
+      border-radius: 0 0 16px 16px;
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+    }
+
+    .phone-screen {
+      background: white;
+      border-radius: 28px;
+      overflow: hidden;
+      aspect-ratio: 9/19.5;
+      position: relative;
+    }
+
+    #preview-page {
+      height: 100%;
+      overflow-y: auto;
+      padding: 40px 20px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: background 0.3s;
+    }
+
+    #preview-page::-webkit-scrollbar { display: none; }
+
+    .preview-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin-bottom: 10px;
+      border: 3px solid rgba(255,255,255,0.3);
+    }
+
+    .preview-name {
+      font-size: 16px;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+
+    .preview-bio {
+      font-size: 12px;
+      color: rgba(255,255,255,0.75);
+      text-align: center;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .preview-link {
+      width: 100%;
+      padding: 11px 16px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 8px;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.25);
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+      display: block;
+    }
+
+    .preview-link:hover { background: rgba(255,255,255,0.3); }
+    .preview-link.whatsapp { background: #25D366; border-color: #25D366; }
+    .preview-link.upi { background: #6739b7; border-color: #6739b7; }
+
+    .preview-footer {
+      margin-top: auto;
+      padding-top: 16px;
+      font-size: 10px;
+      color: rgba(255,255,255,0.4);
+      text-align: center;
+    }
+
+    /* PAYWALL MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal {
+      background: white;
+      border-radius: 24px;
+      padding: 48px 40px;
+      max-width: 440px;
+      width: 90%;
+      text-align: center;
+      animation: popIn 0.3s ease;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.9) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-icon { font-size: 48px; margin-bottom: 16px; }
+    .modal h2 { font-family: 'Fraunces', serif; font-size: 28px; margin-bottom: 8px; }
+    .modal p { color: var(--muted); font-size: 15px; line-height: 1.6; margin-bottom: 28px; }
+
+    .modal-features {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 28px;
+      text-align: left;
+    }
+
+    .modal-feature {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+    }
+
+    .modal-feature::before { content: '✓'; color: var(--secondary); font-weight: 700; }
+
+    .btn-modal-pay {
+      width: 100%;
+      padding: 16px;
+      background: var(--primary);
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+      transition: all 0.2s;
+      box-shadow: 0 8px 24px rgba(255,77,0,0.3);
+      margin-bottom: 12px;
+    }
+
+    .btn-modal-pay:hover { transform: translateY(-2px); }
+
+    .btn-modal-cancel {
+      background: none;
+      border: none;
+      font-size: 13px;
+      color: var(--muted);
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .builder { grid-template-columns: 1fr; }
+      .preview-panel { display: none; }
+      body { overflow: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <a href="index.html" class="topbar-logo">Link<span>Desi</span></a>
+    <div class="topbar-actions">
+      <span class="step-indicator">Builder</span>
+      <button class="btn-publish" onclick="openPublishModal()">Publish — ₹199/mo</button>
+    </div>
+  </div>
+
+  <div class="builder">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab('profile')">👤 Profile</div>
+        <div class="tab" onclick="switchTab('links')">🔗 Links</div>
+        <div class="tab" onclick="switchTab('design')">🎨 Design</div>
+      </div>
+
+      <!-- PROFILE TAB -->
+      <div class="tab-content active" id="tab-profile">
+        <div class="field">
+          <label>Display Name</label>
+          <input type="text" id="f-name" placeholder="e.g. Priya Sharma" oninput="updatePreview()" />
+        </div>
+        <div class="field">
+          <label>Bio</label>
+          <textarea id="f-bio" placeholder="e.g. Singer & Songwriter from Mumbai 🎵" oninput="updatePreview()"></textarea>
+        </div>
+        <div class="field">
+          <label>Profile Emoji / Avatar</label>
+          <input type="text" id="f-emoji" placeholder="e.g. 🎵 or 📸 or 🍳" maxlength="2" oninput="updatePreview()" />
+        </div>
+        <div class="field">
+          <label>Your Username</label>
+          <input type="text" id="f-username" placeholder="e.g. priyamusic" oninput="updatePreview()" />
+          <div style="font-size:11px; color:var(--muted); margin-top:4px;">Your page: linkdesi.in/<span id="username-preview">yourname</span></div>
+        </div>
+
+        <!-- SPECIAL BUTTONS -->
+        <div class="special-section">
+          <div class="special-title">⚡ Special Indian Buttons</div>
+
+          <div class="toggle-row">
+            <div>
+              <div class="toggle-label">💸 UPI Payment</div>
+              <div class="toggle-sub">Let followers pay you directly</div>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="toggle-upi" onchange="toggleSpecial('upi')" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="toggle-input-wrap" id="wrap-upi">
+            <input type="text" id="f-upi" placeholder="your@upi or 9876543210@paytm" oninput="updatePreview()" />
+          </div>
+
+          <div class="toggle-row">
+            <div>
+              <div class="toggle-label">📱 WhatsApp Button</div>
+              <div class="toggle-sub">Direct chat link</div>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="toggle-wa" onchange="toggleSpecial('wa')" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="toggle-input-wrap" id="wrap-wa">
+            <input type="text" id="f-wa" placeholder="10-digit mobile number" oninput="updatePreview()" />
+          </div>
+        </div>
+      </div>
+
+      <!-- LINKS TAB -->
+      <div class="tab-content" id="tab-links">
+        <div class="links-list" id="links-list"></div>
+        <button class="btn-add-link" onclick="addLink()">+ Add Link</button>
+      </div>
+
+      <!-- DESIGN TAB -->
+      <div class="tab-content" id="tab-design">
+        <div class="field">
+          <label>Theme</label>
+          <div class="themes-grid" id="themes-grid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PREVIEW -->
+    <div class="preview-panel">
+      <div class="preview-label">Live Preview</div>
+      <div class="phone-mockup">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div id="preview-page">
+            <div class="preview-avatar" id="prev-avatar">😊</div>
+            <div class="preview-name" id="prev-name">Your Name</div>
+            <div class="preview-bio" id="prev-bio">Your bio goes here</div>
+            <div id="prev-links"></div>
+            <div class="preview-footer">linkdesi.in/yourname</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PUBLISH MODAL -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <div class="modal-icon">🚀</div>
+      <h2>Publish Your Page</h2>
+      <p>Your page is ready! Pay ₹199/month to make it live and shareable.</p>
+      <div class="modal-features">
+        <div class="modal-feature">Live at linkdesi.in/<span id="modal-username">yourname</span></div>
+        <div class="modal-feature">UPI + WhatsApp buttons active</div>
+        <div class="modal-feature">Link click analytics</div>
+        <div class="modal-feature">Cancel anytime</div>
+      </div>
+      <!-- REPLACE with your Razorpay payment link -->
+      <a href="https://rzp.io/rzp/KAPs35a" class="btn-modal-pay" target="_blank">
+        Pay ₹149 & Go Live →
+      </a>
+      <button class="btn-modal-cancel" onclick="closeModal()">Not now</button>
+    </div>
+  </div>
+
+<script>
+  // THEMES
+  const themes = [
+    { bg: 'linear-gradient(135deg,#667eea,#764ba2)', name: 'Purple' },
+    { bg: 'linear-gradient(135deg,#f093fb,#f5576c)', name: 'Pink' },
+    { bg: 'linear-gradient(135deg,#4facfe,#00f2fe)', name: 'Blue' },
+    { bg: 'linear-gradient(135deg,#43e97b,#38f9d7)', name: 'Green' },
+    { bg: 'linear-gradient(135deg,#fa709a,#fee140)', name: 'Sunset' },
+    { bg: 'linear-gradient(135deg,#ff9a9e,#fecfef)', name: 'Rose' },
+    { bg: 'linear-gradient(135deg,#a18cd1,#fbc2eb)', name: 'Lavender' },
+    { bg: 'linear-gradient(135deg,#ffecd2,#fcb69f)', name: 'Peach' },
+    { bg: 'linear-gradient(135deg,#2d3436,#636e72)', name: 'Dark' },
+    { bg: 'linear-gradient(135deg,#ff4d00,#ff8c00)', name: 'Desi' },
+  ];
+
+  let currentTheme = 0;
+  let links = [];
+
+  // Build themes grid
+  const grid = document.getElementById('themes-grid');
+  themes.forEach((t, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'theme-dot' + (i === 0 ? ' active' : '');
+    dot.style.background = t.bg;
+    dot.title = t.name;
+    dot.onclick = () => selectTheme(i);
+    grid.appendChild(dot);
+  });
+
+  function selectTheme(i) {
+    currentTheme = i;
+    document.querySelectorAll('.theme-dot').forEach((d, j) => d.classList.toggle('active', j === i));
+    updatePreview();
+  }
+
+  // TABS
+  function switchTab(name) {
+    document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', ['profile','links','design'][i] === name));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+  }
+
+  // LINKS
+  function addLink() {
+    const id = Date.now();
+    links.push({ id, label: '', url: '' });
+    renderLinks();
+  }
+
+  function removeLink(id) {
+    links = links.filter(l => l.id !== id);
+    renderLinks();
+    updatePreview();
+  }
+
+  function renderLinks() {
+    const list = document.getElementById('links-list');
+    list.innerHTML = '';
+    links.forEach(link => {
+      const div = document.createElement('div');
+      div.className = 'link-item';
+      div.innerHTML = `
+        <button class="link-remove" onclick="removeLink(${link.id})">×</button>
+        <input type="text" placeholder="Button label (e.g. My YouTube)" value="${link.label}"
+          oninput="updateLink(${link.id},'label',this.value)" />
+        <input type="text" placeholder="URL (e.g. https://youtube.com/...)" value="${link.url}"
+          oninput="updateLink(${link.id},'url',this.value)" />
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  function updateLink(id, field, val) {
+    const link = links.find(l => l.id === id);
+    if (link) link[field] = val;
+    updatePreview();
+  }
+
+  // TOGGLES
+  function toggleSpecial(type) {
+    const checked = document.getElementById('toggle-' + type).checked;
+    document.getElementById('wrap-' + type).classList.toggle('active', checked);
+    updatePreview();
+  }
+
+  // PREVIEW
+  function updatePreview() {
+    const name    = document.getElementById('f-name').value || 'Your Name';
+    const bio     = document.getElementById('f-bio').value || 'Your bio goes here';
+    const emoji   = document.getElementById('f-emoji').value || '😊';
+    const username = document.getElementById('f-username').value || 'yourname';
+    const upiOn   = document.getElementById('toggle-upi').checked;
+    const waOn    = document.getElementById('toggle-wa').checked;
+    const upi     = document.getElementById('f-upi').value;
+    const wa      = document.getElementById('f-wa').value;
+
+    document.getElementById('prev-avatar').textContent = emoji;
+    document.getElementById('prev-name').textContent = name;
+    document.getElementById('prev-bio').textContent = bio;
+    document.getElementById('preview-page').style.background = themes[currentTheme].bg;
+    document.getElementById('username-preview').textContent = username || 'yourname';
+
+    const linksEl = document.getElementById('prev-links');
+    linksEl.innerHTML = '';
+
+    links.forEach(link => {
+      if (!link.label) return;
+      const a = document.createElement('a');
+      a.className = 'preview-link';
+      a.textContent = link.label;
+      a.href = link.url || '#';
+      a.target = '_blank';
+      linksEl.appendChild(a);
+    });
+
+    if (waOn && wa) {
+      const a = document.createElement('a');
+      a.className = 'preview-link whatsapp';
+      a.textContent = '📱 WhatsApp Me';
+      a.href = `https://wa.me/91${wa.replace(/\D/g,'')}`;
+      a.target = '_blank';
+      linksEl.appendChild(a);
+    }
+
+    if (upiOn && upi) {
+      const a = document.createElement('a');
+      a.className = 'preview-link upi';
+      a.textContent = '💸 Pay via UPI';
+      a.href = `upi://pay?pa=${upi}&pn=${encodeURIComponent(name)}`;
+      linksEl.appendChild(a);
+    }
+  }
+
+  function openPublishModal() {
+    const username = document.getElementById('f-username').value || 'yourname';
+    document.getElementById('modal-username').textContent = username;
+    document.getElementById('modal-overlay').classList.add('active');
+  }
+
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('active');
+  }
+
+  document.getElementById('modal-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // INIT
+  addLink();
+  updatePreview();
+</script>
+</body>
+</html>
