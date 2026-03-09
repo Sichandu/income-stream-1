@@ -6,9 +6,11 @@
   <title>LinkDesi — Build Your Page</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:wght@700&display=swap" rel="stylesheet"/>
   <style>
-    :root{--bg:#f5f3ef;--ink:#0f0e0c;--primary:#ff4d00;--border:#e0dbd2;--card:#fff;--muted:#8a8070;--green:#00c896;--sidebar:380px;}
+    :root{--bg:#f5f3ef;--ink:#0f0e0c;--primary:#ff4d00;--border:#e0dbd2;--card:#fff;--muted:#8a8070;--sidebar:380px;}
     *{margin:0;padding:0;box-sizing:border-box;}
-    body{background:var(--bg);color:var(--ink);font-family:'Plus Jakarta Sans',sans-serif;height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+
+    html,body{height:100%;overflow:hidden;}
+    body{background:var(--bg);color:var(--ink);font-family:'Plus Jakarta Sans',sans-serif;display:flex;flex-direction:column;}
 
     /* TOPBAR */
     .topbar{height:56px;background:var(--ink);display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex-shrink:0;z-index:10;}
@@ -21,17 +23,30 @@
     .btn-publish:hover{background:#e04400;}
     .btn-publish:disabled{opacity:0.5;cursor:not-allowed;}
 
-    /* LAYOUT */
-    .builder{display:grid;grid-template-columns:var(--sidebar) 1fr;flex:1;overflow:hidden;height:100%;}
+    /* BUILDER — key fix: explicit height */
+    .builder{
+      display:grid;
+      grid-template-columns:var(--sidebar) 1fr;
+      height:calc(100vh - 56px);
+      overflow:hidden;
+    }
+
+    /* SIDEBAR scrolls, preview panel stays fixed */
     .sidebar{background:var(--card);border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column;}
     .sidebar::-webkit-scrollbar{width:4px;}
     .sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
 
+    .preview-panel{
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      background:#e8e4de;overflow:hidden;
+      position:relative;
+    }
+
     /* TABS */
     .tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;}
-    .tab{flex:1;min-width:70px;padding:13px 6px;font-size:11px;font-weight:600;text-align:center;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;}
+    .tab{flex:1;min-width:66px;padding:13px 4px;font-size:11px;font-weight:600;text-align:center;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;}
     .tab.active{color:var(--ink);border-bottom-color:var(--primary);}
-    .tab-content{display:none;padding:20px;flex:1;}
+    .tab-content{display:none;padding:20px;}
     .tab-content.active{display:block;}
 
     /* FIELDS */
@@ -44,42 +59,34 @@
     .username-row{position:relative;}
     .username-status{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:16px;}
 
-    /* PHOTO UPLOAD */
-    .photo-upload{width:100%;aspect-ratio:1;max-width:120px;margin:0 auto 16px;display:block;position:relative;}
-    .photo-preview{width:100%;height:100%;border-radius:50%;object-fit:cover;border:3px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:40px;cursor:pointer;overflow:hidden;transition:border-color 0.2s;}
-    .photo-preview:hover{border-color:var(--primary);}
-    .photo-preview img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
-    .photo-overlay{position:absolute;bottom:4px;right:4px;background:var(--primary);border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.2);}
+    /* PHOTO */
+    .photo-wrap{text-align:center;margin-bottom:16px;}
+    .photo-circle{width:96px;height:96px;border-radius:50%;background:var(--bg);border:3px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:40px;cursor:pointer;overflow:hidden;margin:0 auto 8px;transition:border-color 0.2s;position:relative;}
+    .photo-circle:hover{border-color:var(--primary);}
+    .photo-circle img{width:100%;height:100%;object-fit:cover;}
+    .photo-btn{display:inline-block;font-size:11px;font-weight:600;color:var(--primary);cursor:pointer;}
     #photo-input{display:none;}
-    .upload-hint{font-size:11px;color:var(--muted);text-align:center;margin-bottom:16px;}
-    .upload-progress{font-size:11px;color:var(--primary);text-align:center;display:none;}
+    .upload-status{font-size:11px;color:var(--primary);margin-top:4px;min-height:16px;}
 
-    /* SOCIAL */
+    /* SOCIAL GRID */
     .social-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
     .social-item{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px 10px;}
-    .social-icon{font-size:16px;flex-shrink:0;}
-    .social-item input{border:none;background:transparent;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--ink);outline:none;width:100%;}
+    .social-icon{font-size:15px;flex-shrink:0;}
+    .social-item input{border:none;background:transparent;font-size:12px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--ink);outline:none;width:100%;}
 
-    /* LINKS */
-    .links-list{margin-bottom:12px;}
-    .link-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;position:relative;}
-    .link-item input{width:100%;padding:7px 10px;background:white;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--ink);outline:none;margin-bottom:6px;}
-    .link-item input:last-child{margin-bottom:0;}
-    .link-item input:focus{border-color:var(--primary);}
-    .link-remove{position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;padding:2px;}
-    .link-remove:hover{color:var(--primary);}
-    .btn-add{width:100%;padding:10px;background:transparent;border:2px dashed var(--border);border-radius:10px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:all 0.2s;margin-bottom:8px;}
+    /* LINKS & PRODUCTS */
+    .list-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;position:relative;}
+    .list-item input{width:100%;padding:7px 10px;background:white;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--ink);outline:none;margin-bottom:6px;}
+    .list-item input:last-child{margin-bottom:0;}
+    .list-item input:focus{border-color:var(--primary);}
+    .item-remove{position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;padding:2px;}
+    .item-remove:hover{color:var(--primary);}
+    .item-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:4px;}
+    .btn-add{width:100%;padding:10px;background:transparent;border:2px dashed var(--border);border-radius:10px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:all 0.2s;}
     .btn-add:hover{border-color:var(--primary);color:var(--primary);}
 
-    /* PRODUCTS */
-    .product-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;position:relative;}
-    .product-item input{width:100%;padding:7px 10px;background:white;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--ink);outline:none;margin-bottom:6px;}
-    .product-item input:last-child{margin-bottom:0;}
-    .product-item input:focus{border-color:var(--primary);}
-    .prod-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:4px;}
-
     /* TOGGLES */
-    .section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin:16px 0 10px;}
+    .section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin:16px 0 10px;}
     .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);}
     .toggle-label{font-size:14px;font-weight:500;}
     .toggle-sub{font-size:11px;color:var(--muted);}
@@ -89,63 +96,70 @@
     .toggle-slider::before{content:'';position:absolute;width:16px;height:16px;left:3px;bottom:3px;background:white;border-radius:50%;transition:0.2s;}
     .toggle input:checked+.toggle-slider{background:var(--primary);}
     .toggle input:checked+.toggle-slider::before{transform:translateX(18px);}
-    .toggle-input-wrap{margin-top:8px;display:none;}
-    .toggle-input-wrap.active{display:block;}
-    .toggle-input-wrap input{width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--ink);outline:none;}
+    .toggle-extra{margin-top:8px;display:none;}
+    .toggle-extra.show{display:block;}
+    .toggle-extra input{width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--ink);outline:none;}
 
     /* THEMES */
     .themes-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
     .theme-swatch{border-radius:10px;aspect-ratio:3/4;cursor:pointer;border:3px solid transparent;transition:all 0.2s;position:relative;overflow:hidden;}
-    .theme-swatch.active{border-color:var(--ink);transform:scale(1.05);}
+    .theme-swatch.active{border-color:var(--ink);transform:scale(1.06);}
     .theme-swatch:hover{transform:scale(1.03);}
-    .theme-swatch-label{position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:9px;font-weight:700;color:white;text-shadow:0 1px 3px rgba(0,0,0,0.5);}
+    .swatch-label{position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:9px;font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,0.5);}
 
     /* SUPPORT */
     .support-box{margin-top:20px;padding:14px;background:#f0fdf4;border-radius:10px;border:1px solid #bbf7d0;}
-    .support-box .sup-title{font-size:12px;font-weight:700;color:#166534;margin-bottom:6px;}
+    .support-box b{display:block;font-size:12px;color:#166534;margin-bottom:6px;}
     .support-box a{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#15803d;text-decoration:none;}
 
-    /* PREVIEW PANEL */
-    .preview-panel{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#e8e4de;padding:32px;overflow:hidden;position:relative;width:100%;height:100%;}
+    /* PHONE MOCKUP */
     .preview-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:var(--muted);margin-bottom:20px;}
-    .phone-mockup{width:270px;background:#111;border-radius:44px;padding:12px;box-shadow:0 40px 80px rgba(0,0,0,0.3),0 0 0 1px rgba(255,255,255,0.05);position:relative;}
-    .phone-notch{width:80px;height:22px;background:#111;border-radius:0 0 14px 14px;position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:2;}
-    .phone-screen{background:white;border-radius:34px;overflow:hidden;aspect-ratio:9/19.5;position:relative;}
-    #preview-page{height:100%;overflow-y:auto;display:flex;flex-direction:column;align-items:center;transition:background 0.3s;}
+    .phone-mockup{width:260px;background:#111;border-radius:44px;padding:12px;box-shadow:0 32px 64px rgba(0,0,0,0.3);position:relative;}
+    .phone-notch{width:76px;height:22px;background:#111;border-radius:0 0 14px 14px;position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:2;}
+    .phone-screen{background:white;border-radius:32px;overflow:hidden;aspect-ratio:9/19.5;}
+    #preview-page{height:100%;overflow-y:auto;display:flex;flex-direction:column;align-items:center;}
     #preview-page::-webkit-scrollbar{display:none;}
 
     /* MODAL */
     .preview-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:200;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
     .preview-modal.active{display:flex;}
-    .preview-modal-phone{width:min(300px,80vw);background:#111;border-radius:44px;padding:12px;box-shadow:0 40px 80px rgba(0,0,0,0.5);position:relative;}
-    .preview-modal-phone .pn{width:80px;height:22px;background:#111;border-radius:0 0 14px 14px;position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:2;}
-    .preview-modal-screen{background:white;border-radius:34px;overflow:hidden;aspect-ratio:9/19.5;}
-    #modal-preview-page{height:100%;overflow-y:auto;display:flex;flex-direction:column;align-items:center;}
-    #modal-preview-page::-webkit-scrollbar{display:none;}
+    .modal-phone{width:min(300px,80vw);background:#111;border-radius:44px;padding:12px;box-shadow:0 40px 80px rgba(0,0,0,0.5);position:relative;}
+    .modal-notch{width:76px;height:22px;background:#111;border-radius:0 0 14px 14px;position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:2;}
+    .modal-screen{background:white;border-radius:32px;overflow:hidden;aspect-ratio:9/19.5;}
+    #modal-page{height:100%;overflow-y:auto;display:flex;flex-direction:column;align-items:center;}
+    #modal-page::-webkit-scrollbar{display:none;}
     .modal-actions{display:flex;flex-direction:column;align-items:center;gap:10px;}
-    .btn-close-preview{background:white;color:#333;font-size:14px;font-weight:700;padding:11px 28px;border:none;border-radius:100px;cursor:pointer;}
-    .btn-wa-feedback{display:flex;align-items:center;gap:8px;background:#25D366;color:white;font-size:13px;font-weight:600;padding:9px 22px;border:none;border-radius:100px;cursor:pointer;text-decoration:none;}
+    .btn-close-modal{background:white;color:#333;font-size:14px;font-weight:700;padding:11px 28px;border:none;border-radius:100px;cursor:pointer;}
+    .btn-wa{display:flex;align-items:center;gap:8px;background:#25D366;color:white;font-size:13px;font-weight:600;padding:9px 22px;border:none;border-radius:100px;text-decoration:none;}
 
     /* TOAST */
-    .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:white;padding:12px 24px;border-radius:100px;font-size:14px;font-weight:600;transition:transform 0.3s ease;z-index:999;}
+    .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:white;padding:12px 24px;border-radius:100px;font-size:14px;font-weight:600;transition:transform 0.3s;z-index:999;}
     .toast.show{transform:translateX(-50%) translateY(0);}
-    .toast.error{background:#e53e3e;}
-    .toast.success{background:#00a870;}
+    .toast.err{background:#e53e3e;}
+    .toast.ok{background:#00a870;}
 
-    @media(max-width:768px){.builder{grid-template-columns:1fr;}.preview-panel{display:none;}body{overflow:auto;height:auto;}}
+    @media(max-width:768px){
+      .builder{grid-template-columns:1fr;height:auto;}
+      .preview-panel{display:none;}
+      body{overflow:auto;height:auto;}
+    }
   </style>
 </head>
 <body>
 
+<!-- TOPBAR -->
 <div class="topbar">
   <a href="index.html" class="logo">Link<span>Desi</span></a>
   <div class="topbar-actions">
-    <button class="btn-preview" onclick="openPreviewModal()">👁 Preview</button>
-    <button class="btn-publish" id="publish-btn" onclick="saveAndPublish()">Publish — ₹99/mo</button>
+    <button class="btn-preview" onclick="openModal()">👁 Preview</button>
+    <button class="btn-publish" id="pub-btn" onclick="saveAndPublish()">Publish — ₹99/mo</button>
   </div>
 </div>
 
+<!-- BUILDER GRID -->
 <div class="builder">
+
+  <!-- LEFT: SIDEBAR -->
   <div class="sidebar">
     <div class="tabs">
       <div class="tab active" onclick="switchTab('profile')">👤 Profile</div>
@@ -157,85 +171,86 @@
 
     <!-- PROFILE TAB -->
     <div class="tab-content active" id="tab-profile">
-      <!-- PHOTO UPLOAD -->
-      <div style="text-align:center">
-        <div class="photo-upload" onclick="document.getElementById('photo-input').click()">
-          <div class="photo-preview" id="photo-preview">
-            <span id="photo-emoji">😊</span>
-          </div>
-          <div class="photo-overlay">📷</div>
+      <div class="photo-wrap">
+        <div class="photo-circle" id="photo-circle" onclick="document.getElementById('photo-input').click()">
+          <span id="photo-emoji">😊</span>
         </div>
         <input type="file" id="photo-input" accept="image/*" onchange="uploadPhoto(this)"/>
-        <div class="upload-hint">Tap to upload profile photo</div>
-        <div class="upload-progress" id="upload-progress">Uploading...</div>
+        <span class="photo-btn" onclick="document.getElementById('photo-input').click()">📷 Upload photo</span>
+        <div class="upload-status" id="upload-status"></div>
       </div>
 
       <div class="field">
-        <label>Username <span style="color:var(--primary)">*</span></label>
+        <label>Username *</label>
         <div class="username-row">
           <input type="text" id="f-username" placeholder="e.g. priyamusic" oninput="onUsernameInput()" style="padding-right:36px"/>
-          <span class="username-status" id="username-status"></span>
+          <span class="username-status" id="u-status"></span>
         </div>
-        <div class="field-hint">linkdesi.in/<strong><span id="username-preview">yourname</span></strong></div>
+        <div class="field-hint">linkdesi.in/<strong id="u-preview">yourname</strong></div>
       </div>
+
       <div class="field">
-        <label>Display Name <span style="color:var(--primary)">*</span></label>
-        <input type="text" id="f-name" placeholder="e.g. Priya Sharma" oninput="updatePreview()"/>
+        <label>Display Name *</label>
+        <input type="text" id="f-name" placeholder="e.g. Priya Sharma" oninput="up()"/>
       </div>
+
       <div class="field">
         <label>Bio / Description</label>
-        <textarea id="f-bio" placeholder="e.g. Singer & Songwriter from Mumbai 🎵&#10;Booking open for events!" oninput="updatePreview()"></textarea>
+        <textarea id="f-bio" placeholder="Singer & Songwriter from Mumbai 🎵" oninput="up()"></textarea>
       </div>
+
       <div class="field">
         <label>Profile Emoji (if no photo)</label>
-        <input type="text" id="f-emoji" placeholder="e.g. 🎵 or 📸" maxlength="2" oninput="updatePreview()"/>
+        <input type="text" id="f-emoji" placeholder="🎵 or 📸 or 🍳" maxlength="2" oninput="up()"/>
       </div>
 
-      <div class="section-title">⚡For Indians</div>
-      <!-- <div class="toggle-row">
-        <div><div class="toggle-label">💸 UPI Payment</div><div class="toggle-sub">Let followers pay you</div></div>
-        <label class="toggle"><input type="checkbox" id="toggle-upi" onchange="toggleSpecial('upi')"/><span class="toggle-slider"></span></label>
-      </div>
-      <div class="toggle-input-wrap" id="wrap-upi">
-        <input type="text" id="f-upi" placeholder="your@upi or 9876543210@paytm" oninput="updatePreview()"/>
-      </div> -->
+      <div class="section-label">⚡ Indian Buttons</div>
+
       <div class="toggle-row">
-        <div><div class="toggle-label">📱 WhatsApp Button</div><div class="toggle-sub">Direct chat</div></div>
-        <label class="toggle"><input type="checkbox" id="toggle-wa" onchange="toggleSpecial('wa')"/><span class="toggle-slider"></span></label>
+        <div><div class="toggle-label">💸 UPI Payment</div><div class="toggle-sub">Let followers pay you</div></div>
+        <label class="toggle"><input type="checkbox" id="t-upi" onchange="tog('upi')"/><span class="toggle-slider"></span></label>
       </div>
-      <div class="toggle-input-wrap" id="wrap-wa">
-        <input type="text" id="f-wa" placeholder="10-digit mobile number" oninput="updatePreview()"/>
+      <div class="toggle-extra" id="e-upi">
+        <input type="text" id="f-upi" placeholder="your@upi or 9876543210@paytm" oninput="up()"/>
       </div>
 
-      <!-- <div class="support-box">
-        <div class="sup-title">💬 Need help?</div>
-        <a href="https://wa.me/917893553115" target="_blank"><span>📱</span> WhatsApp us — we reply fast!</a>
+      <div class="toggle-row">
+        <div><div class="toggle-label">📱 WhatsApp Button</div><div class="toggle-sub">Direct chat link</div></div>
+        <label class="toggle"><input type="checkbox" id="t-wa" onchange="tog('wa')"/><span class="toggle-slider"></span></label>
       </div>
-    </div> -->
+      <div class="toggle-extra" id="e-wa">
+        <input type="text" id="f-wa" placeholder="10-digit mobile number" oninput="up()"/>
+      </div>
+
+      <div class="support-box">
+        <b>💬 Need help?</b>
+        <a href="https://wa.me/918185843878" target="_blank">📱 Negotiate at Whatsapp!</a>
+      </div>
+    </div>
 
     <!-- LINKS TAB -->
     <div class="tab-content" id="tab-links">
-      <div style="font-size:13px;color:var(--muted);margin-bottom:16px;">Add up to 7 links. These appear as cards on your page.</div>
-      <div class="links-list" id="links-list"></div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Add up to 7 links.</p>
+      <div id="links-list"></div>
       <button class="btn-add" onclick="addLink()">+ Add Link</button>
     </div>
 
     <!-- SOCIAL TAB -->
     <div class="tab-content" id="tab-social">
-      <div style="font-size:13px;color:var(--muted);margin-bottom:16px;">Add your social handles. These show as icons below your name.</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Social icons appear below your name.</p>
       <div class="social-grid">
-        <div class="social-item"><span class="social-icon">📸</span><input type="text" id="s-instagram" placeholder="Instagram URL" oninput="updatePreview()"/></div>
-        <div class="social-item"><span class="social-icon">▶️</span><input type="text" id="s-youtube" placeholder="YouTube URL" oninput="updatePreview()"/></div>
-        <div class="social-item"><span class="social-icon">𝕏</span><input type="text" id="s-twitter" placeholder="Twitter/X URL" oninput="updatePreview()"/></div>
-        <div class="social-item"><span class="social-icon">💼</span><input type="text" id="s-linkedin" placeholder="LinkedIn URL" oninput="updatePreview()"/></div>
-        <div class="social-item"><span class="social-icon">✈️</span><input type="text" id="s-telegram" placeholder="Telegram URL" oninput="updatePreview()"/></div>
-        <div class="social-item"><span class="social-icon">🎵</span><input type="text" id="s-spotify" placeholder="Spotify URL" oninput="updatePreview()"/></div>
+        <div class="social-item"><span class="social-icon">📸</span><input type="text" id="s-instagram" placeholder="Instagram URL" oninput="up()"/></div>
+        <div class="social-item"><span class="social-icon">▶️</span><input type="text" id="s-youtube" placeholder="YouTube URL" oninput="up()"/></div>
+        <div class="social-item"><span class="social-icon">𝕏</span><input type="text" id="s-twitter" placeholder="Twitter/X URL" oninput="up()"/></div>
+        <div class="social-item"><span class="social-icon">💼</span><input type="text" id="s-linkedin" placeholder="LinkedIn URL" oninput="up()"/></div>
+        <div class="social-item"><span class="social-icon">✈️</span><input type="text" id="s-telegram" placeholder="Telegram URL" oninput="up()"/></div>
+        <div class="social-item"><span class="social-icon">🎵</span><input type="text" id="s-spotify" placeholder="Spotify URL" oninput="up()"/></div>
       </div>
     </div>
 
     <!-- PRODUCTS TAB -->
     <div class="tab-content" id="tab-products">
-      <div style="font-size:13px;color:var(--muted);margin-bottom:16px;">Add products/services. Each gets a card with a UPI pay button.</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Product cards with UPI pay button.</p>
       <div id="products-list"></div>
       <button class="btn-add" onclick="addProduct()">+ Add Product / Service</button>
     </div>
@@ -247,9 +262,10 @@
         <div class="themes-grid" id="themes-grid"></div>
       </div>
     </div>
-  </div>
 
-  <!-- DESKTOP PREVIEW -->
+  </div><!-- end sidebar -->
+
+  <!-- RIGHT: LIVE PREVIEW -->
   <div class="preview-panel">
     <div class="preview-label">Live Preview</div>
     <div class="phone-mockup">
@@ -259,19 +275,20 @@
       </div>
     </div>
   </div>
-</div>
+
+</div><!-- end builder -->
 
 <!-- MOBILE PREVIEW MODAL -->
 <div class="preview-modal" id="preview-modal">
-  <div class="preview-modal-phone">
-    <div class="pn"></div>
-    <div class="preview-modal-screen">
-      <div id="modal-preview-page"></div>
+  <div class="modal-phone">
+    <div class="modal-notch"></div>
+    <div class="modal-screen">
+      <div id="modal-page"></div>
     </div>
   </div>
   <div class="modal-actions">
-    <button class="btn-close-preview" onclick="closePreviewModal()">✕ Close</button>
-    <a class="btn-wa-feedback" href="https://wa.me/918185843878?text=Hey!%20I%20previewed%20my%20LinkDesi%20page%20and%20have%20feedback!" target="_blank">💬 Share Feedback</a>
+    <button class="btn-close-modal" onclick="closeModal()">✕ Close Preview</button>
+    <a class="btn-wa" href="https://wa.me/918185843878?text=Hey!%20I%20previewed%20my%20LinkDesi%20page%20and%20have%20feedback!" target="_blank">💬 Share Feedback</a>
   </div>
 </div>
 
@@ -279,334 +296,260 @@
 
 <script>
 const API_BASE = "https://income-stream-1-1.onrender.com";
-const RAZORPAY_LINK = "https://rzp.io/rzp/linkdesi";
+const RAZORPAY_LINK = "";
 const CLOUDINARY_CLOUD = "da0acvohe";
-const CLOUDINARY_PRESET = "linkdesi_upload"; // You need to create this unsigned preset in Cloudinary
+const CLOUDINARY_PRESET = "linkdesi_upload";
 
 const themes = [
-  { name:"Ivory",    bg:"#faf7f2", text:"#1a1a1a", card:"rgba(0,0,0,0.06)", btn:"#1a1a1a", btnText:"white",    accent:"#ff4d00" },
-  { name:"Slate",    bg:"#1a1f2e", text:"#f0ede8", card:"rgba(255,255,255,0.08)", btn:"#f0ede8", btnText:"#1a1f2e", accent:"#6c8fff" },
-  { name:"Rose",     bg:"#fff0f3", text:"#2d1a1f", card:"rgba(200,50,80,0.08)", btn:"#e8405a", btnText:"white",    accent:"#e8405a" },
-  { name:"Forest",   bg:"#f0f7f0", text:"#1a2e1a", card:"rgba(30,100,30,0.08)", btn:"#2d7a2d", btnText:"white",    accent:"#2d7a2d" },
-  { name:"Ocean",    bg:"#f0f5ff", text:"#1a2040", card:"rgba(30,60,200,0.08)", btn:"#2040c8", btnText:"white",    accent:"#2040c8" },
-  { name:"Dusk",     bg:"#1a0a2e", text:"#f0e8ff", card:"rgba(150,80,255,0.12)", btn:"#9650ff", btnText:"white",    accent:"#ff6bb5" },
-  { name:"Sand",     bg:"#f7f0e0", text:"#2a2010", card:"rgba(120,80,0,0.08)",  btn:"#8b6914", btnText:"white",    accent:"#c8941a" },
-  { name:"Charcoal", bg:"#111111", text:"#eeeeee", card:"rgba(255,255,255,0.07)", btn:"#ff4d00", btnText:"white",   accent:"#ff4d00" },
-  { name:"Blush",    bg:"#fdf0f8", text:"#2a0a20", card:"rgba(200,50,150,0.08)", btn:"#c8328c", btnText:"white",   accent:"#c8328c" },
-  { name:"Mint",     bg:"#f0fdf8", text:"#0a2a1f", card:"rgba(0,150,100,0.08)", btn:"#00966e", btnText:"white",    accent:"#00966e" },
+  {name:"Ivory",    bg:"#faf7f2",text:"#1a1a1a",card:"rgba(0,0,0,0.05)",  btn:"#1a1a1a",btnT:"white",   acc:"#ff4d00",soc:"rgba(0,0,0,0.05)"},
+  {name:"Slate",    bg:"#1a1f2e",text:"#f0ede8",card:"rgba(255,255,255,0.08)",btn:"#f0ede8",btnT:"#1a1f2e",acc:"#6c8fff",soc:"rgba(255,255,255,0.08)"},
+  {name:"Rose",     bg:"#fff0f3",text:"#2d1a1f",card:"rgba(200,50,80,0.07)", btn:"#e8405a",btnT:"white",   acc:"#e8405a",soc:"rgba(232,64,90,0.08)"},
+  {name:"Forest",   bg:"#f0f7f0",text:"#1a2e1a",card:"rgba(30,100,30,0.07)", btn:"#2d7a2d",btnT:"white",   acc:"#2d7a2d",soc:"rgba(45,122,45,0.08)"},
+  {name:"Ocean",    bg:"#f0f5ff",text:"#1a2040",card:"rgba(30,60,200,0.07)", btn:"#2040c8",btnT:"white",   acc:"#2040c8",soc:"rgba(32,64,200,0.08)"},
+  {name:"Dusk",     bg:"#1a0a2e",text:"#f0e8ff",card:"rgba(150,80,255,0.1)",  btn:"#9650ff",btnT:"white",   acc:"#ff6bb5",soc:"rgba(150,80,255,0.12)"},
+  {name:"Sand",     bg:"#f7f0e0",text:"#2a2010",card:"rgba(120,80,0,0.07)",   btn:"#8b6914",btnT:"white",   acc:"#c8941a",soc:"rgba(139,105,20,0.08)"},
+  {name:"Charcoal", bg:"#111111",text:"#eeeeee",card:"rgba(255,255,255,0.07)",btn:"#ff4d00",btnT:"white",   acc:"#ff4d00",soc:"rgba(255,255,255,0.07)"},
+  {name:"Blush",    bg:"#fdf0f8",text:"#2a0a20",card:"rgba(200,50,150,0.07)", btn:"#c8328c",btnT:"white",   acc:"#c8328c",soc:"rgba(200,50,150,0.08)"},
+  {name:"Mint",     bg:"#f0fdf8",text:"#0a2a1f",card:"rgba(0,150,100,0.07)",  btn:"#00966e",btnT:"white",   acc:"#00966e",soc:"rgba(0,150,100,0.08)"},
 ];
 
-let currentTheme = 0;
-let links = [];
-let products = [];
-let photoUrl = "";
-let usernameTimer = null;
+let curTheme=0, links=[], products=[], photoUrl="", uTimer=null;
 
 // Build theme swatches
-const tGrid = document.getElementById('themes-grid');
-themes.forEach((t, i) => {
-  const div = document.createElement('div');
-  div.className = 'theme-swatch' + (i===0?' active':'');
-  div.style.background = t.bg;
-  div.style.border = `3px solid ${i===0?t.text:'transparent'}`;
-  div.innerHTML = `
-    <div style="height:40%;background:${t.card};margin:6px;border-radius:4px;"></div>
-    <div style="height:18%;background:${t.btn};margin:0 6px;border-radius:4px;"></div>
-    <div class="theme-swatch-label" style="color:${t.text}">${t.name}</div>
-  `;
-  div.onclick = () => {
-    currentTheme = i;
-    document.querySelectorAll('.theme-swatch').forEach((s,j) => {
-      s.classList.toggle('active', j===i);
-      s.style.borderColor = j===i ? themes[j].text : 'transparent';
-    });
-    updatePreview();
+const tg = document.getElementById('themes-grid');
+themes.forEach((t,i)=>{
+  const d=document.createElement('div');
+  d.className='theme-swatch'+(i===0?' active':'');
+  d.style.background=t.bg;
+  d.style.borderColor=i===0?t.text:'transparent';
+  d.innerHTML=`<div style="height:40%;background:${t.card};margin:5px;border-radius:4px;margin-top:10px;"></div><div style="height:16%;background:${t.btn};margin:0 5px;border-radius:4px;"></div><div class="swatch-label" style="color:${t.text}">${t.name}</div>`;
+  d.onclick=()=>{
+    curTheme=i;
+    document.querySelectorAll('.theme-swatch').forEach((s,j)=>{s.classList.toggle('active',j===i);s.style.borderColor=j===i?themes[j].text:'transparent';});
+    up();
   };
-  tGrid.appendChild(div);
+  tg.appendChild(d);
 });
 
-// TABS
-function switchTab(name) {
-  const names = ['profile','links','social','products','design'];
-  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', names[i]===name));
-  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-  document.getElementById('tab-'+name).classList.add('active');
+function switchTab(n){
+  const ns=['profile','links','social','products','design'];
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',ns[i]===n));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById('tab-'+n).classList.add('active');
 }
 
-// PHOTO UPLOAD via Cloudinary
-async function uploadPhoto(input) {
-  const file = input.files[0];
-  if (!file) return;
-  const progress = document.getElementById('upload-progress');
-  progress.style.display = 'block';
-  progress.textContent = 'Uploading...';
-
-  const fd = new FormData();
-  fd.append('file', file);
-  fd.append('upload_preset', CLOUDINARY_PRESET);
-  fd.append('folder', 'linkdesi');
-
-  try {
-    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, {
-      method: 'POST', body: fd
-    });
-    const data = await res.json();
-    if (data.secure_url) {
-      photoUrl = data.secure_url;
-      const preview = document.getElementById('photo-preview');
-      preview.innerHTML = `<img src="${photoUrl}" alt="profile"/>`;
-      progress.textContent = '✅ Photo uploaded!';
-      updatePreview();
-    } else {
-      progress.textContent = '⚠ Upload failed. Check Cloudinary preset.';
-    }
-  } catch(e) {
-    progress.textContent = '⚠ Upload error';
-  }
-  setTimeout(() => progress.style.display='none', 3000);
+// Photo upload
+async function uploadPhoto(input){
+  const file=input.files[0]; if(!file) return;
+  const st=document.getElementById('upload-status');
+  st.textContent='Uploading...';
+  const fd=new FormData();
+  fd.append('file',file); fd.append('upload_preset',CLOUDINARY_PRESET); fd.append('folder','linkdesi');
+  try{
+    const r=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
+    const d=await r.json();
+    if(d.secure_url){
+      photoUrl=d.secure_url;
+      const c=document.getElementById('photo-circle');
+      c.innerHTML=`<img src="${photoUrl}" alt="photo"/>`;
+      st.textContent='✅ Uploaded!';
+      up();
+    } else { st.textContent='⚠ Upload failed — check Cloudinary preset'; }
+  }catch(e){ st.textContent='⚠ Upload error'; }
+  setTimeout(()=>st.textContent='',3000);
 }
 
-// USERNAME
-function onUsernameInput() {
-  const val = document.getElementById('f-username').value.trim().toLowerCase();
-  document.getElementById('username-preview').textContent = val || 'yourname';
-  document.getElementById('username-status').textContent = '';
-  clearTimeout(usernameTimer);
-  if (val.length >= 3) usernameTimer = setTimeout(() => checkUsername(val), 600);
-  updatePreview();
+function onUsernameInput(){
+  const v=document.getElementById('f-username').value.trim().toLowerCase();
+  document.getElementById('u-preview').textContent=v||'yourname';
+  document.getElementById('u-status').textContent='';
+  clearTimeout(uTimer);
+  if(v.length>=3) uTimer=setTimeout(()=>checkU(v),600);
+  up();
 }
 
-async function checkUsername(u) {
-  try {
-    const r = await fetch(`${API_BASE}/check/${u}`);
-    const d = await r.json();
-    document.getElementById('username-status').textContent = d.available ? '✅' : '❌';
-  } catch(e) {}
+async function checkU(u){
+  try{const r=await fetch(`${API_BASE}/check/${u}`);const d=await r.json();document.getElementById('u-status').textContent=d.available?'✅':'❌';}catch(e){}
 }
 
-// LINKS
-function addLink() {
-  if (links.length >= 7) { showToast('Max 7 links allowed', true); return; }
-  links.push({ id: Date.now(), label:'', url:'' });
+function tog(type){
+  const on=document.getElementById('t-'+type).checked;
+  document.getElementById('e-'+type).classList.toggle('show',on);
+  up();
+}
+
+function addLink(){
+  if(links.length>=7){toast('Max 7 links',true);return;}
+  links.push({id:Date.now(),label:'',url:''});
   renderLinks();
 }
-
-function removeLink(id) { links = links.filter(l=>l.id!==id); renderLinks(); updatePreview(); }
-
-function renderLinks() {
-  const list = document.getElementById('links-list');
-  list.innerHTML = '';
-  links.forEach(link => {
-    const div = document.createElement('div');
-    div.className = 'link-item';
-    div.innerHTML = `
-      <button class="link-remove" onclick="removeLink(${link.id})">×</button>
-      <input type="text" placeholder="Label (e.g. My YouTube Channel)" value="${link.label}" oninput="updateLink(${link.id},'label',this.value)"/>
-      <input type="text" placeholder="URL (https://...)" value="${link.url}" oninput="updateLink(${link.id},'url',this.value)"/>
-    `;
-    list.appendChild(div);
+function removeLink(id){links=links.filter(l=>l.id!==id);renderLinks();up();}
+function renderLinks(){
+  const el=document.getElementById('links-list');
+  el.innerHTML='';
+  links.forEach(l=>{
+    const d=document.createElement('div');
+    d.className='list-item';
+    d.innerHTML=`<button class="item-remove" onclick="removeLink(${l.id})">×</button>
+      <input type="text" placeholder="Label (e.g. My YouTube)" value="${l.label}" oninput="uLink(${l.id},'label',this.value)"/>
+      <input type="text" placeholder="URL (https://...)" value="${l.url}" oninput="uLink(${l.id},'url',this.value)"/>`;
+    el.appendChild(d);
   });
 }
+function uLink(id,f,v){const l=links.find(x=>x.id===id);if(l)l[f]=v;up();}
 
-function updateLink(id, field, val) {
-  const l = links.find(l=>l.id===id); if(l) l[field]=val; updatePreview();
-}
-
-// PRODUCTS
-function addProduct() {
-  products.push({ id: Date.now(), title:'', price:'', upi_id:'' });
+function addProduct(){
+  products.push({id:Date.now(),title:'',price:'',upi:''});
   renderProducts();
 }
-
-function removeProduct(id) { products = products.filter(p=>p.id!==id); renderProducts(); updatePreview(); }
-
-function renderProducts() {
-  const list = document.getElementById('products-list');
-  list.innerHTML = '';
-  products.forEach(p => {
-    const div = document.createElement('div');
-    div.className = 'product-item';
-    div.innerHTML = `
-      <button class="link-remove" onclick="removeProduct(${p.id})">×</button>
-      <div class="prod-label">Product / Service Name</div>
-      <input type="text" placeholder="e.g. 1:1 Coaching Session" value="${p.title}" oninput="updateProduct(${p.id},'title',this.value)"/>
-      <div class="prod-label">Price</div>
-      <input type="text" placeholder="e.g. ₹999" value="${p.price}" oninput="updateProduct(${p.id},'price',this.value)"/>
-      <div class="prod-label">UPI ID for payment</div>
-      <input type="text" placeholder="your@upi" value="${p.upi_id}" oninput="updateProduct(${p.id},'upi_id',this.value)"/>
-    `;
-    list.appendChild(div);
+function removeProduct(id){products=products.filter(p=>p.id!==id);renderProducts();up();}
+function renderProducts(){
+  const el=document.getElementById('products-list');
+  el.innerHTML='';
+  products.forEach(p=>{
+    const d=document.createElement('div');
+    d.className='list-item';
+    d.innerHTML=`<button class="item-remove" onclick="removeProduct(${p.id})">×</button>
+      <div class="item-label">Product Name</div>
+      <input type="text" placeholder="e.g. 1:1 Coaching Session" value="${p.title}" oninput="uProd(${p.id},'title',this.value)"/>
+      <div class="item-label">Price</div>
+      <input type="text" placeholder="e.g. ₹999" value="${p.price}" oninput="uProd(${p.id},'price',this.value)"/>
+      <div class="item-label">UPI ID</div>
+      <input type="text" placeholder="your@upi" value="${p.upi}" oninput="uProd(${p.id},'upi',this.value)"/>`;
+    el.appendChild(d);
   });
 }
+function uProd(id,f,v){const p=products.find(x=>x.id===id);if(p)p[f]=v;up();}
 
-function updateProduct(id, field, val) {
-  const p = products.find(p=>p.id===id); if(p) p[field]=val; updatePreview();
+function getSocial(){
+  const keys=['instagram','youtube','twitter','linkedin','telegram','spotify'];
+  const s={};
+  keys.forEach(k=>{const v=document.getElementById('s-'+k).value.trim();if(v)s[k]=v;});
+  return s;
 }
 
-// TOGGLES
-function toggleSpecial(type) {
-  const checked = document.getElementById('toggle-'+type).checked;
-  document.getElementById('wrap-'+type).classList.toggle('active', checked);
-  updatePreview();
-}
+function buildHTML(small){
+  const t=themes[curTheme];
+  const name=document.getElementById('f-name').value||'Your Name';
+  const bio=document.getElementById('f-bio').value||'';
+  const emoji=document.getElementById('f-emoji').value||'😊';
+  const upiOn=document.getElementById('t-upi').checked;
+  const waOn=document.getElementById('t-wa').checked;
+  const upi=document.getElementById('f-upi').value;
+  const wa=document.getElementById('f-wa').value;
+  const social=getSocial();
 
-// GET SOCIAL VALUES
-function getSocial() {
-  const keys = ['instagram','youtube','twitter','linkedin','telegram','spotify'];
-  const social = {};
-  keys.forEach(k => { const v = document.getElementById('s-'+k).value.trim(); if(v) social[k]=v; });
-  return social;
-}
+  const pad=small?'36px 14px 20px':'48px 24px 28px';
+  const avS=small?'64px':'88px';
+  const nameS=small?'15px':'21px';
+  const bioS=small?'10px':'13px';
+  const linkS=small?'11px':'14px';
+  const socS=small?'14px':'20px';
+  const socW=small?'30px':'40px';
 
-// BUILD PREVIEW HTML
-function buildPageHTML(data, small=true) {
-  const t = themes[data.theme];
-  const fs = small ? { name:'14px', bio:'10px', link:'11px', social:'14px', prod:'11px' }
-                   : { name:'20px', bio:'13px', link:'14px', social:'20px', prod:'14px' };
-  const pad = small ? '36px 16px 20px' : '48px 24px 28px';
-  const avatarSize = small ? '64px' : '88px';
-  const avatarFont = small ? '30px' : '44px';
+  const avatarInner=photoUrl
+    ?`<img src="${photoUrl}" style="width:100%;height:100%;object-fit:cover;"/>`
+    :`<span style="font-size:${small?'28px':'44px'}">${emoji}</span>`;
 
-  let socialHTML = '';
-  const socialIcons = {instagram:'📸',youtube:'▶️',twitter:'𝕏',linkedin:'💼',telegram:'✈️',spotify:'🎵'};
-  const socialKeys = Object.keys(data.social||{}).filter(k=>data.social[k]);
-  if (socialKeys.length) {
-    socialHTML = `<div style="display:flex;gap:10px;margin-bottom:${small?'14px':'20px'};flex-wrap:wrap;justify-content:center;">`;
-    socialKeys.forEach(k => {
-      socialHTML += `<a href="${data.social[k]}" target="_blank" style="width:${small?'32px':'40px'};height:${small?'32px':'40px'};border-radius:50%;background:${t.card};display:flex;align-items:center;justify-content:center;font-size:${fs.social};text-decoration:none;border:1px solid rgba(128,128,128,0.15);">${socialIcons[k]||'🔗'}</a>`;
-    });
-    socialHTML += `</div>`;
+  const socialIcons={instagram:'📸',youtube:'▶️',twitter:'𝕏',linkedin:'💼',telegram:'✈️',spotify:'🎵'};
+  let socialHTML='';
+  const sKeys=Object.keys(social).filter(k=>social[k]);
+  if(sKeys.length){
+    socialHTML=`<div style="display:flex;gap:8px;margin-bottom:${small?'12px':'18px'};flex-wrap:wrap;justify-content:center;">`;
+    sKeys.forEach(k=>{socialHTML+=`<a href="${social[k]}" target="_blank" style="width:${socW};height:${socW};border-radius:50%;background:${t.soc};display:flex;align-items:center;justify-content:center;font-size:${socS};text-decoration:none;border:1px solid rgba(128,128,128,0.15);">${socialIcons[k]||'🔗'}</a>`;});
+    socialHTML+='</div>';
   }
 
-  let linksHTML = '';
-  data.links.forEach(l => {
-    if (!l.label) return;
-    linksHTML += `<a href="${l.url||'#'}" target="_blank" style="display:block;width:100%;padding:${small?'10px 14px':'13px 18px'};border-radius:${small?'10px':'14px'};background:${t.card};color:${t.text};font-size:${fs.link};font-weight:600;text-decoration:none;margin-bottom:${small?'7px':'10px'};border:1px solid rgba(128,128,128,0.12);box-shadow:0 2px 8px rgba(0,0,0,0.06);text-align:center;">${l.label}</a>`;
+  let linksHTML='';
+  links.forEach(l=>{
+    if(!l.label)return;
+    linksHTML+=`<a href="${l.url||'#'}" target="_blank" style="display:block;width:100%;padding:${small?'9px 12px':'13px 18px'};border-radius:${small?'9px':'13px'};background:${t.card};color:${t.text};font-size:${linkS};font-weight:600;text-decoration:none;margin-bottom:${small?'6px':'9px'};border:1px solid rgba(128,128,128,0.1);box-shadow:0 2px 8px rgba(0,0,0,0.05);text-align:center;">${l.label}</a>`;
   });
+  if(waOn&&wa) linksHTML+=`<a href="https://wa.me/91${wa.replace(/\D/g,'')}" style="display:block;width:100%;padding:${small?'9px 12px':'13px 18px'};border-radius:${small?'9px':'13px'};background:#25D366;color:white;font-size:${linkS};font-weight:700;text-decoration:none;margin-bottom:${small?'6px':'9px'};text-align:center;">💬 WhatsApp Me</a>`;
+  if(upiOn&&upi) linksHTML+=`<a href="upi://pay?pa=${encodeURIComponent(upi)}&pn=${encodeURIComponent(name)}" style="display:block;width:100%;padding:${small?'9px 12px':'13px 18px'};border-radius:${small?'9px':'13px'};background:#6739b7;color:white;font-size:${linkS};font-weight:700;text-decoration:none;margin-bottom:${small?'6px':'9px'};text-align:center;">💸 Pay via UPI</a>`;
 
-  if (data.whatsapp) {
-    linksHTML += `<a href="https://wa.me/91${data.whatsapp.replace(/\D/g,'')}" target="_blank" style="display:block;width:100%;padding:${small?'10px 14px':'13px 18px'};border-radius:${small?'10px':'14px'};background:#25D366;color:white;font-size:${fs.link};font-weight:700;text-decoration:none;margin-bottom:${small?'7px':'10px'};text-align:center;">💬 WhatsApp Me</a>`;
-  }
-
-  if (data.upi_id) {
-    linksHTML += `<a href="upi://pay?pa=${encodeURIComponent(data.upi_id)}&pn=${encodeURIComponent(data.name)}" style="display:block;width:100%;padding:${small?'10px 14px':'13px 18px'};border-radius:${small?'10px':'14px'};background:#6739b7;color:white;font-size:${fs.link};font-weight:700;text-decoration:none;margin-bottom:${small?'7px':'10px'};text-align:center;">💸 Pay via UPI</a>`;
-  }
-
-  let productsHTML = '';
-  const validProducts = data.products.filter(p=>p.title);
-  if (validProducts.length) {
-    productsHTML += `<div style="width:100%;margin-top:${small?'8px':'12px'};">`;
-    validProducts.forEach(p => {
-      productsHTML += `
-        <div style="background:${t.card};border:1px solid rgba(128,128,128,0.12);border-radius:${small?'10px':'14px'};padding:${small?'10px':'14px'};margin-bottom:${small?'7px':'10px'};box-shadow:0 2px 8px rgba(0,0,0,0.06);">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-            <div style="font-size:${fs.prod};font-weight:700;color:${t.text};">${p.title}</div>
-            <div style="font-size:${fs.prod};font-weight:800;color:${t.accent};">${p.price}</div>
-          </div>
-          <a href="upi://pay?pa=${encodeURIComponent(p.upi_id||'')}&pn=${encodeURIComponent(p.title)}&am=${(p.price||'').replace(/[₹,\s]/g,'')}" style="display:block;background:${t.btn};color:${t.btnText};font-size:${small?'10px':'12px'};font-weight:700;padding:${small?'6px':'9px'};border-radius:${small?'6px':'8px'};text-align:center;text-decoration:none;">Buy Now 💳</a>
+  let prodsHTML='';
+  const vp=products.filter(p=>p.title);
+  if(vp.length){
+    prodsHTML=`<div style="width:100%;margin-top:${small?'8px':'12px'};">`;
+    vp.forEach(p=>{
+      prodsHTML+=`<div style="background:${t.card};border:1px solid rgba(128,128,128,0.1);border-radius:${small?'9px':'13px'};padding:${small?'9px':'13px'};margin-bottom:${small?'6px':'9px'};box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:${small?'6px':'9px'};">
+          <div style="font-size:${small?'10px':'13px'};font-weight:700;color:${t.text};">${p.title}</div>
+          <div style="font-size:${small?'11px':'15px'};font-weight:800;color:${t.acc};">${p.price}</div>
         </div>
-      `;
+        <a href="upi://pay?pa=${encodeURIComponent(p.upi||'')}&pn=${encodeURIComponent(p.title)}&am=${(p.price||'').replace(/[₹,\s]/g,'')}" style="display:block;background:${t.btn};color:${t.btnT};font-size:${small?'9px':'12px'};font-weight:700;padding:${small?'5px':'8px'};border-radius:${small?'6px':'8px'};text-align:center;text-decoration:none;">Buy Now 💳</a>
+      </div>`;
     });
-    productsHTML += `</div>`;
+    prodsHTML+='</div>';
   }
 
-  const avatarContent = data.photoUrl
-    ? `<img src="${data.photoUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"/>`
-    : `<span style="font-size:${avatarFont}">${data.emoji||'😊'}</span>`;
-
-  return `
-    <div style="min-height:100%;width:100%;background:${t.bg};padding:${pad};display:flex;flex-direction:column;align-items:center;">
-      <div style="width:${avatarSize};height:${avatarSize};border-radius:50%;overflow:hidden;margin-bottom:${small?'10px':'14px'};display:flex;align-items:center;justify-content:center;background:${t.card};border:3px solid rgba(128,128,128,0.15);box-shadow:0 4px 20px rgba(0,0,0,0.1);">${avatarContent}</div>
-      <div style="font-size:${fs.name};font-weight:800;color:${t.text};margin-bottom:4px;text-align:center;letter-spacing:-0.02em;">${data.name||'Your Name'}</div>
-      <div style="font-size:${fs.bio};color:${t.text};opacity:0.65;text-align:center;margin-bottom:${small?'14px':'20px'};line-height:1.6;max-width:${small?'200px':'300px'};">${data.bio||''}</div>
-      ${socialHTML}
-      <div style="width:100%;">${linksHTML}</div>
-      ${productsHTML}
-      <div style="margin-top:auto;padding-top:16px;font-size:9px;color:${t.text};opacity:0.3;text-align:center;">Made with LinkDesi</div>
-    </div>
-  `;
+  return `<div style="min-height:100%;width:100%;background:${t.bg};padding:${pad};display:flex;flex-direction:column;align-items:center;">
+    <div style="width:${avS};height:${avS};border-radius:50%;overflow:hidden;margin-bottom:${small?'10px':'14px'};display:flex;align-items:center;justify-content:center;background:${t.card};border:3px solid rgba(128,128,128,0.12);box-shadow:0 4px 20px rgba(0,0,0,0.08);">${avatarInner}</div>
+    <div style="font-size:${nameS};font-weight:800;color:${t.text};margin-bottom:5px;text-align:center;letter-spacing:-0.02em;">${name}</div>
+    <div style="font-size:${bioS};color:${t.text};opacity:0.6;text-align:center;margin-bottom:${small?'14px':'18px'};line-height:1.65;max-width:${small?'190px':'290px'};">${bio}</div>
+    ${socialHTML}
+    <div style="width:100%;">${linksHTML}</div>
+    ${prodsHTML}
+    <div style="margin-top:auto;padding-top:14px;font-size:9px;color:${t.text};opacity:0.25;text-align:center;">Made with LinkDesi</div>
+  </div>`;
 }
 
-function getPageData() {
-  return {
-    name: document.getElementById('f-name').value,
-    bio: document.getElementById('f-bio').value,
-    emoji: document.getElementById('f-emoji').value || '😊',
-    photoUrl,
-    theme: currentTheme,
-    links,
-    social: getSocial(),
-    products,
-    upi_id: document.getElementById('toggle-upi').checked ? document.getElementById('f-upi').value : '',
-    whatsapp: document.getElementById('toggle-wa').checked ? document.getElementById('f-wa').value : '',
-  };
+function up(){
+  document.getElementById('preview-page').innerHTML=buildHTML(true);
+  document.getElementById('u-preview').textContent=document.getElementById('f-username').value||'yourname';
+  if(!photoUrl) document.getElementById('photo-emoji').textContent=document.getElementById('f-emoji').value||'😊';
 }
 
-function updatePreview() {
-  document.getElementById('preview-page').innerHTML = buildPageHTML(getPageData(), true);
-  document.getElementById('username-preview').textContent = document.getElementById('f-username').value || 'yourname';
-  // update emoji in photo preview if no photo
-  if (!photoUrl) document.getElementById('photo-emoji').textContent = document.getElementById('f-emoji').value || '😊';
-}
-
-function openPreviewModal() {
-  const mp = document.getElementById('modal-preview-page');
-  mp.innerHTML = buildPageHTML(getPageData(), false);
+function openModal(){
+  document.getElementById('modal-page').innerHTML=buildHTML(false);
   document.getElementById('preview-modal').classList.add('active');
 }
+function closeModal(){document.getElementById('preview-modal').classList.remove('active');}
 
-function closePreviewModal() {
-  document.getElementById('preview-modal').classList.remove('active');
+function toast(msg,isErr=false,isOk=false){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast show'+(isErr?' err':'')+(isOk?' ok':'');
+  setTimeout(()=>t.className='toast',3000);
 }
 
-function showToast(msg, isError=false, isSuccess=false) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast show' + (isError?' error':'') + (isSuccess?' success':'');
-  setTimeout(() => t.className='toast', 3000);
-}
+async function saveAndPublish(){
+  const username=document.getElementById('f-username').value.trim().toLowerCase();
+  const name=document.getElementById('f-name').value.trim();
+  if(!username||username.length<3)return toast('⚠ Enter a username (min 3 chars)',true);
+  if(!name)return toast('⚠ Enter your display name',true);
 
-async function saveAndPublish() {
-  const username = document.getElementById('f-username').value.trim().toLowerCase();
-  const name = document.getElementById('f-name').value.trim();
-  if (!username || username.length < 3) return showToast('⚠ Enter a username (min 3 chars)', true);
-  if (!name) return showToast('⚠ Enter your display name', true);
+  const btn=document.getElementById('pub-btn');
+  btn.disabled=true;btn.textContent='Saving...';
 
-  const btn = document.getElementById('publish-btn');
-  btn.disabled = true; btn.textContent = 'Saving...';
-
-  try {
-    const payload = {
-      username, name,
-      bio: document.getElementById('f-bio').value,
-      emoji: document.getElementById('f-emoji').value || '😊',
-      photo_url: photoUrl,
-      theme_index: currentTheme,
-      links: links.filter(l=>l.label).map(l=>({label:l.label, url:l.url})),
-      social: getSocial(),
-      products: products.filter(p=>p.title).map(p=>({title:p.title, price:p.price, upi_id:p.upi_id})),
-      upi_id: document.getElementById('toggle-upi').checked ? document.getElementById('f-upi').value : '',
-      whatsapp: document.getElementById('toggle-wa').checked ? document.getElementById('f-wa').value : '',
+  try{
+    const payload={
+      username,name,
+      bio:document.getElementById('f-bio').value,
+      emoji:document.getElementById('f-emoji').value||'😊',
+      photo_url:photoUrl,
+      theme_index:curTheme,
+      links:links.filter(l=>l.label).map(l=>({label:l.label,url:l.url})),
+      social:getSocial(),
+      products:products.filter(p=>p.title).map(p=>({title:p.title,price:p.price,upi_id:p.upi})),
+      upi_id:document.getElementById('t-upi').checked?document.getElementById('f-upi').value:'',
+      whatsapp:document.getElementById('t-wa').checked?document.getElementById('f-wa').value:'',
     };
-
-    const res = await fetch(`${API_BASE}/page`, {
-      method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
-    });
-
-    if (!res.ok) { const e=await res.json(); throw new Error(e.detail||'Save failed'); }
-
-    showToast('✅ Saved! Redirecting to payment...', false, true);
-    localStorage.setItem('pending_username', username);
-    setTimeout(() => { window.location.href = RAZORPAY_LINK + `?notes[username]=${username}`; }, 1500);
-  } catch(e) {
-    showToast('⚠ '+e.message, true);
-    btn.disabled=false; btn.textContent='Publish — ₹99/mo';
+    const res=await fetch(`${API_BASE}/page`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    if(!res.ok){const e=await res.json();throw new Error(e.detail||'Save failed');}
+    toast('✅ Saved! Redirecting to payment...',false,true);
+    localStorage.setItem('pending_username',username);
+    setTimeout(()=>{window.location.href=RAZORPAY_LINK+`?notes[username]=${username}`;},1500);
+  }catch(e){
+    toast('⚠ '+e.message,true);
+    btn.disabled=false;btn.textContent='Publish — ₹99/mo';
   }
 }
 
-// INIT
+// Init
 addLink();
-updatePreview();
+up();
 </script>
 </body>
 </html>
