@@ -1,424 +1,236 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>LinkDesi</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;}
 
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-      overflow-x: hidden;
-    }
-
-    /* ANIMATED BACKGROUND */
-    .bg-layer {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      transition: background 0.5s ease;
-    }
-
-    .bg-layer::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.18);
-    }
-
-    /* GLASS NOISE OVERLAY */
-    .bg-layer::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    /* FLOATING BLOBS */
-    .blob {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.35;
-      pointer-events: none;
-      z-index: 0;
-      animation: float 8s ease-in-out infinite;
-    }
-
-    .blob-1 { width: 400px; height: 400px; top: -100px; right: -100px; background: rgba(255,255,255,0.2); animation-delay: 0s; }
-    .blob-2 { width: 300px; height: 300px; bottom: -80px; left: -80px; background: rgba(255,255,255,0.15); animation-delay: -3s; }
-
-    @keyframes float {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(20px, -20px) scale(1.05); }
-    }
-
-    /* MAIN CONTENT */
-    .page-wrap {
-      position: relative;
-      z-index: 10;
-      width: 100%;
-      max-width: 480px;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 56px 24px 40px;
-    }
+    .page-wrap{min-height:100vh;width:100%;max-width:520px;margin:0 auto;padding:56px 24px 40px;display:flex;flex-direction:column;align-items:center;}
 
     /* AVATAR */
-    .avatar-ring {
-      position: relative;
-      margin-bottom: 16px;
-    }
+    .avatar-wrap{position:relative;margin-bottom:16px;}
+    .avatar{width:96px;height:96px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:48px;border:3px solid rgba(128,128,128,0.15);box-shadow:0 8px 32px rgba(0,0,0,0.12);}
+    .avatar img{width:100%;height:100%;object-fit:cover;}
 
-    .avatar-ring::before {
-      content: '';
-      position: absolute;
-      inset: -4px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.3);
-      backdrop-filter: blur(4px);
-    }
+    /* TEXT */
+    .display-name{font-size:22px;font-weight:800;letter-spacing:-0.02em;text-align:center;margin-bottom:8px;}
+    .bio{font-size:14px;line-height:1.7;text-align:center;max-width:320px;margin-bottom:20px;opacity:0.65;}
 
-    .avatar {
-      position: relative;
-      width: 96px;
-      height: 96px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.2);
-      backdrop-filter: blur(8px);
-      border: 2px solid rgba(255,255,255,0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 48px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.4);
-    }
-
-    /* NAME & BIO */
-    .display-name {
-      font-size: 24px;
-      font-weight: 800;
-      color: white;
-      text-align: center;
-      letter-spacing: -0.02em;
-      text-shadow: 0 2px 12px rgba(0,0,0,0.2);
-      margin-bottom: 8px;
-    }
-
-    .bio {
-      font-size: 14px;
-      color: rgba(255,255,255,0.8);
-      text-align: center;
-      line-height: 1.7;
-      max-width: 320px;
-      margin-bottom: 36px;
-    }
+    /* SOCIAL ICONS */
+    .social-row{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;justify-content:center;}
+    .social-icon-btn{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;text-decoration:none;transition:transform 0.2s,box-shadow 0.2s;border:1px solid rgba(128,128,128,0.15);}
+    .social-icon-btn:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,0.15);}
 
     /* LINKS */
-    .links-wrap {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+    .links-wrap{width:100%;display:flex;flex-direction:column;gap:10px;}
 
-    .link-btn {
-      width: 100%;
-      padding: 16px 24px;
-      border-radius: 16px;
-      font-size: 15px;
-      font-weight: 600;
-      text-align: center;
-      color: white;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      cursor: pointer;
+    .link-btn{width:100%;padding:14px 20px;border-radius:14px;font-size:15px;font-weight:600;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:10px;transition:transform 0.2s,box-shadow 0.2s;cursor:pointer;border:1px solid rgba(128,128,128,0.12);box-shadow:0 2px 12px rgba(0,0,0,0.06);position:relative;overflow:hidden;}
+    .link-btn::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,0);transition:background 0.2s;}
+    .link-btn:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(0,0,0,0.14);}
+    .link-btn:hover::after{background:rgba(255,255,255,0.08);}
+    .link-btn:active{transform:translateY(-1px);}
 
-      /* Glass morphism */
-      background: rgba(255,255,255,0.18);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.3);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.3);
-    }
+    .link-btn.whatsapp{background:#25D366;color:white;border-color:#25D366;box-shadow:0 4px 20px rgba(37,211,102,0.3);}
+    .link-btn.whatsapp:hover{box-shadow:0 12px 28px rgba(37,211,102,0.45);}
+    .link-btn.upi{background:#6739b7;color:white;border-color:#6739b7;box-shadow:0 4px 20px rgba(103,57,183,0.3);}
+    .link-btn.upi:hover{box-shadow:0 12px 28px rgba(103,57,183,0.45);}
 
-    .link-btn::before {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%;
-      width: 100%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-      transition: left 0.4s ease;
-    }
+    /* PRODUCT CARDS */
+    .products-section{width:100%;margin-top:16px;}
+    .products-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;opacity:0.4;margin-bottom:12px;text-align:center;}
 
-    .link-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3); }
-    .link-btn:hover::before { left: 100%; }
-    .link-btn:active { transform: translateY(-1px); }
+    .product-card{width:100%;border-radius:16px;padding:16px 18px;margin-bottom:10px;border:1px solid rgba(128,128,128,0.12);box-shadow:0 2px 12px rgba(0,0,0,0.06);transition:transform 0.2s,box-shadow 0.2s;}
+    .product-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,0.12);}
+    .product-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+    .product-title{font-size:15px;font-weight:700;}
+    .product-price{font-size:18px;font-weight:800;}
+    .product-buy{display:block;width:100%;padding:11px;border-radius:10px;font-size:13px;font-weight:700;text-align:center;text-decoration:none;transition:opacity 0.2s,transform 0.2s;color:white;}
+    .product-buy:hover{opacity:0.9;transform:translateY(-1px);}
 
-    .link-btn.whatsapp {
-      background: linear-gradient(135deg, #25D366, #128C7E);
-      border-color: rgba(255,255,255,0.2);
-      box-shadow: 0 4px 20px rgba(37,211,102,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
-    }
-
-    .link-btn.whatsapp:hover { box-shadow: 0 12px 32px rgba(37,211,102,0.5); }
-
-    .link-btn.upi {
-      background: linear-gradient(135deg, #6739b7, #9c27b0);
-      border-color: rgba(255,255,255,0.2);
-      box-shadow: 0 4px 20px rgba(103,57,183,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
-    }
-
-    .link-btn.upi:hover { box-shadow: 0 12px 32px rgba(103,57,183,0.5); }
-
-    .link-icon { font-size: 18px; flex-shrink: 0; }
+    /* VISITOR COUNTER */
+    .visitor-count{margin-top:8px;font-size:11px;opacity:0.35;text-align:center;}
 
     /* FOOTER */
-    .footer {
-      margin-top: auto;
-      padding-top: 40px;
-      text-align: center;
-    }
-
-    .footer a {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      color: rgba(255,255,255,0.45);
-      text-decoration: none;
-      transition: color 0.2s;
-      font-weight: 500;
-    }
-
-    .footer a:hover { color: rgba(255,255,255,0.75); }
+    .footer{margin-top:auto;padding-top:32px;text-align:center;}
+    .footer a{font-size:12px;opacity:0.35;text-decoration:none;transition:opacity 0.2s;font-weight:500;}
+    .footer a:hover{opacity:0.6;}
 
     /* LOADING */
-    .loading {
-      position: relative;
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      gap: 16px;
-      color: white;
-      font-size: 14px;
-    }
-
-    .spinner {
-      width: 40px; height: 40px;
-      border: 3px solid rgba(255,255,255,0.2);
-      border-top-color: white;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;font-size:14px;}
+    .spinner{width:36px;height:36px;border:3px solid rgba(128,128,128,0.2);border-top-color:#888;border-radius:50%;animation:spin 0.8s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg);}}
 
     /* NOT FOUND */
-    .not-found {
-      position: relative;
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      text-align: center;
-      padding: 24px;
-      color: white;
-    }
-
-    .not-found h2 { font-size: 32px; font-weight: 800; margin-bottom: 12px; }
-    .not-found p { font-size: 15px; color: rgba(255,255,255,0.7); margin-bottom: 28px; }
-
-    .btn-create {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: white;
-      color: #333;
-      font-size: 14px;
-      font-weight: 700;
-      padding: 14px 28px;
-      border-radius: 100px;
-      text-decoration: none;
-      transition: all 0.2s;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-    }
-
-    .btn-create:hover { transform: translateY(-2px); box-shadow: 0 16px 32px rgba(0,0,0,0.25); }
+    .not-found{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;}
+    .not-found h2{font-size:28px;font-weight:800;margin-bottom:10px;}
+    .not-found p{font-size:15px;opacity:0.6;margin-bottom:24px;}
+    .btn-create{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:700;padding:14px 28px;border-radius:100px;text-decoration:none;transition:all 0.2s;box-shadow:0 8px 24px rgba(0,0,0,0.15);}
+    .btn-create:hover{transform:translateY(-2px);}
 
     /* ENTRANCE ANIMATIONS */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .avatar-ring { animation: fadeUp 0.5s ease 0.1s both; }
-    .display-name { animation: fadeUp 0.5s ease 0.2s both; }
-    .bio { animation: fadeUp 0.5s ease 0.3s both; }
-    .link-btn:nth-child(1) { animation: fadeUp 0.5s ease 0.35s both; }
-    .link-btn:nth-child(2) { animation: fadeUp 0.5s ease 0.4s both; }
-    .link-btn:nth-child(3) { animation: fadeUp 0.5s ease 0.45s both; }
-    .link-btn:nth-child(4) { animation: fadeUp 0.5s ease 0.5s both; }
-    .link-btn:nth-child(5) { animation: fadeUp 0.5s ease 0.55s both; }
-    .link-btn:nth-child(6) { animation: fadeUp 0.5s ease 0.6s both; }
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+    .animate{animation:fadeUp 0.5s ease both;}
   </style>
 </head>
 <body>
 
-<div class="bg-layer" id="bg-layer"></div>
-<div class="blob blob-1"></div>
-<div class="blob blob-2"></div>
-
 <div id="root">
   <div class="loading">
     <div class="spinner"></div>
-    <span>Loading your page...</span>
+    <span>Loading...</span>
   </div>
 </div>
 
 <script>
-  const API_BASE = "https://income-stream-1-1.onrender.com";
+const API_BASE = "https://income-stream-1-1.onrender.com";
 
-  const themes = [
-    'linear-gradient(135deg,#667eea,#764ba2)',
-    'linear-gradient(135deg,#f093fb,#f5576c)',
-    'linear-gradient(135deg,#4facfe,#00f2fe)',
-    'linear-gradient(135deg,#43e97b,#38f9d7)',
-    'linear-gradient(135deg,#fa709a,#fee140)',
-    'linear-gradient(135deg,#ff9a9e,#fecfef)',
-    'linear-gradient(135deg,#a18cd1,#fbc2eb)',
-    'linear-gradient(135deg,#ffecd2,#fcb69f)',
-    'linear-gradient(135deg,#2d3436,#636e72)',
-    'linear-gradient(135deg,#ff4d00,#ff8c00)',
-  ];
+const themes = [
+  { name:"Ivory",    bg:"#faf7f2", text:"#1a1a1a", card:"rgba(0,0,0,0.04)", btn:"#1a1a1a", btnText:"white",    accent:"#ff4d00", social:"rgba(0,0,0,0.05)" },
+  { name:"Slate",    bg:"#1a1f2e", text:"#f0ede8", card:"rgba(255,255,255,0.07)", btn:"#f0ede8", btnText:"#1a1f2e", accent:"#6c8fff", social:"rgba(255,255,255,0.08)" },
+  { name:"Rose",     bg:"#fff0f3", text:"#2d1a1f", card:"rgba(200,50,80,0.06)", btn:"#e8405a", btnText:"white",    accent:"#e8405a", social:"rgba(232,64,90,0.08)" },
+  { name:"Forest",   bg:"#f0f7f0", text:"#1a2e1a", card:"rgba(30,100,30,0.06)", btn:"#2d7a2d", btnText:"white",    accent:"#2d7a2d", social:"rgba(45,122,45,0.08)" },
+  { name:"Ocean",    bg:"#f0f5ff", text:"#1a2040", card:"rgba(30,60,200,0.06)", btn:"#2040c8", btnText:"white",    accent:"#2040c8", social:"rgba(32,64,200,0.08)" },
+  { name:"Dusk",     bg:"#1a0a2e", text:"#f0e8ff", card:"rgba(150,80,255,0.1)", btn:"#9650ff", btnText:"white",    accent:"#ff6bb5", social:"rgba(150,80,255,0.12)" },
+  { name:"Sand",     bg:"#f7f0e0", text:"#2a2010", card:"rgba(120,80,0,0.06)",  btn:"#8b6914", btnText:"white",    accent:"#c8941a", social:"rgba(139,105,20,0.08)" },
+  { name:"Charcoal", bg:"#111111", text:"#eeeeee", card:"rgba(255,255,255,0.06)", btn:"#ff4d00", btnText:"white",  accent:"#ff4d00", social:"rgba(255,255,255,0.07)" },
+  { name:"Blush",    bg:"#fdf0f8", text:"#2a0a20", card:"rgba(200,50,150,0.06)", btn:"#c8328c", btnText:"white",   accent:"#c8328c", social:"rgba(200,50,150,0.08)" },
+  { name:"Mint",     bg:"#f0fdf8", text:"#0a2a1f", card:"rgba(0,150,100,0.06)", btn:"#00966e", btnText:"white",    accent:"#00966e", social:"rgba(0,150,100,0.08)" },
+];
 
-  const linkIcons = {
-    youtube: '▶️', instagram: '📸', twitter: '🐦', spotify: '🎵',
-    facebook: '📘', linkedin: '💼', telegram: '✈️', website: '🌐',
-  };
+const socialIcons = {instagram:'📸',youtube:'▶️',twitter:'𝕏',linkedin:'💼',telegram:'✈️',spotify:'🎵'};
 
-  function getIcon(url, label) {
-    const u = (url + label).toLowerCase();
-    for (const [key, icon] of Object.entries(linkIcons)) {
-      if (u.includes(key)) return icon;
-    }
-    return '🔗';
-  }
+function esc(str) {
+  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 
-  function escHtml(str) {
-    return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
+const params = new URLSearchParams(window.location.search);
+const username = params.get('u');
 
-  const params = new URLSearchParams(window.location.search);
-  const username = params.get('u');
+async function loadPage() {
+  if (!username) { showNotFound(); return; }
+  try {
+    const res = await fetch(`${API_BASE}/page/${username}`);
+    if (!res.ok) { showNotFound(); return; }
+    const data = await res.json();
+    renderPage(data);
+  } catch(e) { showNotFound(); }
+}
 
-  async function loadPage() {
-    const root = document.getElementById('root');
+function renderPage(data) {
+  const t = themes[data.theme_index || 0];
+  document.body.style.background = t.bg;
+  document.title = `${data.name} | LinkDesi`;
 
-    if (!username) { showNotFound(); return; }
+  // Avatar
+  const avatarInner = data.photo_url
+    ? `<img src="${esc(data.photo_url)}" alt="${esc(data.name)}"/>`
+    : `<span>${esc(data.emoji||'😊')}</span>`;
 
-    try {
-      const res = await fetch(`${API_BASE}/page/${username}`);
-      if (!res.ok) { showNotFound(); return; }
-      const data = await res.json();
-      renderPage(data);
-    } catch(e) {
-      showNotFound();
-    }
-  }
-
-  function renderPage(data) {
-    // Set background
-    const bg = themes[data.theme_index || 0];
-    document.getElementById('bg-layer').style.background = bg;
-    document.title = `${data.name} | LinkDesi`;
-
-    // Update blob colors based on theme
-    document.querySelectorAll('.blob').forEach(b => {
-      b.style.background = 'rgba(255,255,255,0.15)';
+  // Social icons
+  let socialHTML = '';
+  const social = data.social || {};
+  const socialKeys = Object.keys(social).filter(k => social[k]);
+  if (socialKeys.length) {
+    socialHTML = `<div class="social-row animate" style="animation-delay:0.3s">`;
+    socialKeys.forEach(k => {
+      socialHTML += `<a class="social-icon-btn" href="${esc(social[k])}" target="_blank" rel="noopener" style="background:${t.social};color:${t.text};">${socialIcons[k]||'🔗'}</a>`;
     });
+    socialHTML += `</div>`;
+  }
 
-    const links = data.links || [];
-    let linksHTML = '';
+  // Regular links
+  let linksHTML = '';
+  const links = data.links || [];
+  links.forEach((link, i) => {
+    if (!link.label) return;
+    const icon = getLinkIcon(link.url||'', link.label);
+    linksHTML += `<a class="link-btn animate" href="${esc(link.url||'#')}" target="_blank" rel="noopener" style="background:${t.card};color:${t.text};animation-delay:${0.35+i*0.05}s">${icon} ${esc(link.label)}</a>`;
+  });
 
-    links.forEach(link => {
-      if (!link.label) return;
-      const icon = getIcon(link.url||'', link.label);
-      linksHTML += `
-        <a class="link-btn" href="${escHtml(link.url||'#')}" target="_blank" rel="noopener">
-          <span class="link-icon">${icon}</span>
-          ${escHtml(link.label)}
-        </a>
+  if (data.whatsapp) {
+    const num = data.whatsapp.replace(/\D/g,'');
+    linksHTML += `<a class="link-btn whatsapp animate" href="https://wa.me/91${num}" target="_blank" rel="noopener" style="animation-delay:0.5s">💬 WhatsApp Me</a>`;
+  }
+
+  if (data.upi_id) {
+    linksHTML += `<a class="link-btn upi animate" href="upi://pay?pa=${encodeURIComponent(data.upi_id)}&pn=${encodeURIComponent(data.name)}" style="animation-delay:0.55s">💸 Pay via UPI</a>`;
+  }
+
+  // Product cards
+  let productsHTML = '';
+  const products = (data.products || []).filter(p => p.title);
+  if (products.length) {
+    productsHTML = `<div class="products-section animate" style="animation-delay:0.6s">
+      <div class="products-title" style="color:${t.text}">Products & Services</div>`;
+    products.forEach(p => {
+      const amt = (p.price||'').replace(/[₹,\s]/g,'');
+      productsHTML += `
+        <div class="product-card" style="background:${t.card};color:${t.text};">
+          <div class="product-header">
+            <div class="product-title">${esc(p.title)}</div>
+            <div class="product-price" style="color:${t.accent}">${esc(p.price)}</div>
+          </div>
+          <a class="product-buy" href="upi://pay?pa=${encodeURIComponent(p.upi_id||'')}&pn=${encodeURIComponent(p.title)}&am=${amt}" style="background:${t.btn}">Buy Now 💳</a>
+        </div>
       `;
     });
-
-    if (data.whatsapp) {
-      const num = data.whatsapp.replace(/\D/g,'');
-      linksHTML += `
-        <a class="link-btn whatsapp" href="https://wa.me/91${num}" target="_blank" rel="noopener">
-          <span class="link-icon">💬</span> WhatsApp Me
-        </a>
-      `;
-    }
-
-    if (data.upi_id) {
-      linksHTML += `
-        <a class="link-btn upi" href="upi://pay?pa=${encodeURIComponent(data.upi_id)}&pn=${encodeURIComponent(data.name)}">
-          <span class="link-icon">💸</span> Pay via UPI
-        </a>
-      `;
-    }
-
-    document.getElementById('root').innerHTML = `
-      <div class="page-wrap">
-        <div class="avatar-ring">
-          <div class="avatar">${escHtml(data.emoji||'😊')}</div>
-        </div>
-        <div class="display-name">${escHtml(data.name)}</div>
-        <div class="bio">${escHtml(data.bio||'')}</div>
-        <div class="links-wrap">${linksHTML}</div>
-        <div class="footer">
-          <a href="index.html">⚡ Create your free LinkDesi page</a>
-        </div>
-      </div>
-    `;
+    productsHTML += `</div>`;
   }
 
-  function showNotFound() {
-    document.getElementById('bg-layer').style.background = 'linear-gradient(135deg,#667eea,#764ba2)';
-    document.getElementById('root').innerHTML = `
-      <div class="not-found">
-        <div style="font-size:64px;margin-bottom:16px">🔍</div>
-        <h2>Page not found</h2>
-        <p>This page doesn't exist or hasn't been activated yet.</p>
-        <a href="index.html" class="btn-create">⚡ Create Your Page →</a>
-      </div>
-    `;
-  }
+  // Visitor count
+  const visits = data.visits || 0;
+  const visitorHTML = `<div class="visitor-count" style="color:${t.text}">👁 ${visits.toLocaleString('en-IN')} visits</div>`;
 
-  loadPage();
+  document.getElementById('root').innerHTML = `
+    <div class="page-wrap" style="background:${t.bg};color:${t.text};">
+      <div class="avatar-wrap animate" style="animation-delay:0.1s">
+        <div class="avatar" style="background:${t.card};">${avatarInner}</div>
+      </div>
+      <div class="display-name animate" style="color:${t.text};animation-delay:0.15s">${esc(data.name)}</div>
+      <div class="bio animate" style="color:${t.text};animation-delay:0.2s">${esc(data.bio||'')}</div>
+      ${socialHTML}
+      <div class="links-wrap">${linksHTML}</div>
+      ${productsHTML}
+      ${visitorHTML}
+      <div class="footer animate" style="animation-delay:0.7s">
+        <a href="index.html" style="color:${t.text}">⚡ Create your free LinkDesi page</a>
+      </div>
+    </div>
+  `;
+}
+
+function getLinkIcon(url, label) {
+  const s = (url+label).toLowerCase();
+  if (s.includes('youtube')) return '▶️';
+  if (s.includes('instagram')) return '📸';
+  if (s.includes('spotify')) return '🎵';
+  if (s.includes('twitter') || s.includes('x.com')) return '𝕏';
+  if (s.includes('linkedin')) return '💼';
+  if (s.includes('telegram')) return '✈️';
+  if (s.includes('facebook')) return '📘';
+  if (s.includes('shop') || s.includes('buy') || s.includes('store')) return '🛍';
+  if (s.includes('book') || s.includes('cal')) return '📅';
+  if (s.includes('course') || s.includes('learn')) return '📚';
+  return '🔗';
+}
+
+function showNotFound() {
+  document.body.style.background = '#faf7f2';
+  document.getElementById('root').innerHTML = `
+    <div class="not-found">
+      <div style="font-size:56px;margin-bottom:16px">🔍</div>
+      <h2>Page not found</h2>
+      <p>This page doesn't exist or hasn't been activated yet.</p>
+      <a href="index.html" class="btn-create" style="background:#ff4d00;color:white;">⚡ Create Your Page →</a>
+    </div>
+  `;
+}
+
+loadPage();
 </script>
 </body>
 </html>
