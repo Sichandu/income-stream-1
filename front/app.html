@@ -22,7 +22,7 @@
     .btn-publish:disabled{opacity:0.5;cursor:not-allowed;}
 
     /* LAYOUT */
-    .builder{display:grid;grid-template-columns:var(--sidebar) 1fr;flex:1;overflow:hidden;min-height:0;}
+    .builder{display:grid;grid-template-columns:var(--sidebar) 1fr;flex:1;overflow:hidden;height:100%;}
     .sidebar{background:var(--card);border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column;}
     .sidebar::-webkit-scrollbar{width:4px;}
     .sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
@@ -106,7 +106,7 @@
     .support-box a{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#15803d;text-decoration:none;}
 
     /* PREVIEW PANEL */
-    .preview-panel{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#e8e4de;padding:32px;overflow:hidden;}
+    .preview-panel{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#e8e4de;padding:32px;overflow:hidden;position:relative;width:100%;height:100%;}
     .preview-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:var(--muted);margin-bottom:20px;}
     .phone-mockup{width:270px;background:#111;border-radius:44px;padding:12px;box-shadow:0 40px 80px rgba(0,0,0,0.3),0 0 0 1px rgba(255,255,255,0.05);position:relative;}
     .phone-notch{width:80px;height:22px;background:#111;border-radius:0 0 14px 14px;position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:2;}
@@ -192,13 +192,13 @@
       </div>
 
       <div class="section-title">⚡ Indian Buttons</div>
-      <!-- <div class="toggle-row">
+      <div class="toggle-row">
         <div><div class="toggle-label">💸 UPI Payment</div><div class="toggle-sub">Let followers pay you</div></div>
         <label class="toggle"><input type="checkbox" id="toggle-upi" onchange="toggleSpecial('upi')"/><span class="toggle-slider"></span></label>
       </div>
       <div class="toggle-input-wrap" id="wrap-upi">
         <input type="text" id="f-upi" placeholder="your@upi or 9876543210@paytm" oninput="updatePreview()"/>
-      </div> -->
+      </div>
       <div class="toggle-row">
         <div><div class="toggle-label">📱 WhatsApp Button</div><div class="toggle-sub">Direct chat</div></div>
         <label class="toggle"><input type="checkbox" id="toggle-wa" onchange="toggleSpecial('wa')"/><span class="toggle-slider"></span></label>
@@ -279,7 +279,7 @@
 
 <script>
 const API_BASE = "https://income-stream-1-1.onrender.com";
-const RAZORPAY_LINK = "";
+const RAZORPAY_LINK = "https://rzp.io/rzp/linkdesi";
 const CLOUDINARY_CLOUD = "da0acvohe";
 const CLOUDINARY_PRESET = "linkdesi_upload"; // You need to create this unsigned preset in Cloudinary
 
