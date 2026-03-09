@@ -45,6 +45,7 @@ class PageData(BaseModel):
     products: Optional[List[ProductCard]] = []
     upi_id: Optional[str] = ""
     whatsapp: Optional[str] = ""
+    support_wa: Optional[str] = ""
     is_active: Optional[bool] = False
 
 
@@ -99,6 +100,8 @@ def create_or_update_page(data: PageData):
         "products": [p.dict() for p in data.products],
         "upi_id": data.upi_id,
         "whatsapp": data.whatsapp,
+        "support_wa": data.support_wa,
+        "support_wa": data.support_wa,
     }
 
     if existing.data:

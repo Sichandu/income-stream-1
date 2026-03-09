@@ -71,7 +71,7 @@
     /* SOCIAL GRID */
     .social-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
     .social-item{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px 10px;}
-    .social-icon{font-size:15px;flex-shrink:0;}
+    .social-icon{width:22px;height:22px;flex-shrink:0;border-radius:4px;}
     .social-item input{border:none;background:transparent;font-size:12px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--ink);outline:none;width:100%;}
 
     /* LINKS & PRODUCTS */
@@ -222,9 +222,26 @@
         <input type="text" id="f-wa" placeholder="10-digit mobile number" oninput="up()"/>
       </div>
 
+      <div class="toggle-row">
+        <div><div class="toggle-label">🎧 Support Button</div><div class="toggle-sub">Pinned at bottom of your page</div></div>
+        <label class="toggle"><input type="checkbox" id="t-support" onchange="tog('support')"/><span class="toggle-slider"></span></label>
+      </div>
+      <div class="toggle-extra" id="e-support">
+        <input type="text" id="f-support" placeholder="WhatsApp number for support" oninput="up()"/>
+      </div>
+
+      <div class="toggle-row">
+        <div><div class="toggle-label">🎧 Support Button</div><div class="toggle-sub">WhatsApp for your customers</div></div>
+        <label class="toggle"><input type="checkbox" id="t-support" onchange="tog('support')"/><span class="toggle-slider"></span></label>
+      </div>
+      <div class="toggle-extra" id="e-support">
+        <input type="text" id="f-support" placeholder="10-digit mobile number" oninput="up()"/>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px;">Shows as a floating button at the bottom of your page</div>
+      </div>
+
       <div class="support-box">
         <b>💬 Need help?</b>
-        <a href="https://wa.me/918185843878" target="_blank">📱 Negotiate at Whatsapp!</a>
+        <a href="https://wa.me/917893553115" target="_blank">📱 WhatsApp us — we reply fast!</a>
       </div>
     </div>
 
@@ -239,12 +256,30 @@
     <div class="tab-content" id="tab-social">
       <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Social icons appear below your name.</p>
       <div class="social-grid">
-        <div class="social-item"><span class="social-icon">📸</span><input type="text" id="s-instagram" placeholder="Instagram URL" oninput="up()"/></div>
-        <div class="social-item"><span class="social-icon">▶️</span><input type="text" id="s-youtube" placeholder="YouTube URL" oninput="up()"/></div>
-        <div class="social-item"><span class="social-icon">𝕏</span><input type="text" id="s-twitter" placeholder="Twitter/X URL" oninput="up()"/></div>
-        <div class="social-item"><span class="social-icon">💼</span><input type="text" id="s-linkedin" placeholder="LinkedIn URL" oninput="up()"/></div>
-        <div class="social-item"><span class="social-icon">✈️</span><input type="text" id="s-telegram" placeholder="Telegram URL" oninput="up()"/></div>
-        <div class="social-item"><span class="social-icon">🎵</span><input type="text" id="s-spotify" placeholder="Spotify URL" oninput="up()"/></div>
+        <div class="social-item">
+          <svg class="social-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="ig1" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#ffd676"/><stop offset="25%" stop-color="#f9a43a"/><stop offset="50%" stop-color="#e75480"/><stop offset="75%" stop-color="#a440b5"/><stop offset="100%" stop-color="#6a5af9"/></radialGradient></defs><rect width="24" height="24" rx="6" fill="url(#ig1)"/><rect x="6.5" y="6.5" width="11" height="11" rx="3" stroke="white" stroke-width="1.5" fill="none"/><circle cx="12" cy="12" r="3" stroke="white" stroke-width="1.5" fill="none"/><circle cx="16.2" cy="7.8" r="0.8" fill="white"/></svg>
+          <input type="text" id="s-instagram" placeholder="Instagram URL" oninput="up()"/>
+        </div>
+        <div class="social-item">
+          <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="5" fill="#FF0000"/><path d="M19.5 8s-.2-1.3-.8-1.9c-.7-.8-1.6-.8-2-.8C14.8 5.2 12 5.2 12 5.2s-2.8 0-4.7.1c-.4 0-1.3.1-2 .8-.6.6-.8 1.9-.8 1.9S4.3 9.5 4.3 11v1.4c0 1.5.2 2.9.2 2.9s.2 1.3.8 1.9c.8.8 1.8.7 2.2.8C8.8 18 12 18 12 18s2.8 0 4.7-.1c.4-.1 1.3-.1 2-.8.6-.6.8-1.9.8-1.9s.2-1.4.2-2.9V11c0-1.5-.2-3-.2-3zM10.3 14V9.7l5.3 2.2-5.3 2.1z" fill="white"/></svg>
+          <input type="text" id="s-youtube" placeholder="YouTube URL" oninput="up()"/>
+        </div>
+        <div class="social-item">
+          <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="5" fill="#000"/><path d="M17.5 4h2.6l-5.7 6.5L21 20h-5.2l-4.1-5.4L7 20H4.4l6.1-7L4 4h5.3l3.7 4.9L17.5 4zm-.9 14.4h1.4L7.4 5.5H5.9l10.7 12.9z" fill="white"/></svg>
+          <input type="text" id="s-twitter" placeholder="Twitter/X URL" oninput="up()"/>
+        </div>
+        <div class="social-item">
+          <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="5" fill="#0A66C2"/><path d="M7.2 9.4H4.8v8.3h2.4V9.4zm-1.2-3.7C5.2 5 4.7 4.5 4 4.5s-1.2.5-1.2 1.2S3.3 6.9 4 6.9s1.2-.5 1.2-1.2h-.2zm15.2 7c0-2.4-1.3-3.5-3-3.5-1.4 0-2 .8-2.4 1.3V9.4h-2.4v8.3h2.4V13c0-.2 0-.4.1-.5.2-.5.7-1 1.4-1 1 0 1.4.8 1.4 1.9v4.3h2.4V13h.1z" fill="white"/></svg>
+          <input type="text" id="s-linkedin" placeholder="LinkedIn URL" oninput="up()"/>
+        </div>
+        <div class="social-item">
+          <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="5" fill="#229ED9"/><path d="M19.7 5.3c-.2-.2-.6-.3-.9-.1L3.7 11.5c-.3.1-.5.4-.5.8 0 .3.2.6.5.7l3.4 1.2 1.4 4.4c.1.3.4.5.7.5.2 0 .4-.1.5-.3l2-2.1 3.8 2.8c.1.1.3.2.5.2.4 0 .8-.3.9-.7l2.6-12.5c.1-.4 0-.8-.3-1.1zm-8 10.1l-.7 2.3-.8-2.8 6.8-7.3-5.3 7.8z" fill="white"/></svg>
+          <input type="text" id="s-telegram" placeholder="Telegram URL" oninput="up()"/>
+        </div>
+        <div class="social-item">
+          <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="5" fill="#1DB954"/><path d="M12 4a8 8 0 100 16A8 8 0 0012 4zm3.7 11.5c-.2.2-.4.3-.7.1-1.8-1.1-4.1-1.4-6.8-.7-.3.1-.5-.1-.6-.4-.1-.3.1-.5.4-.6 2.9-.7 5.5-.4 7.5.8.3.1.3.5.2.8zm1-2.3c-.2.2-.5.3-.7.1-2.1-1.3-5.2-1.7-7.6-.9-.3.1-.6-.1-.7-.4-.1-.3.1-.6.4-.7 2.8-.8 6.2-.4 8.5 1.1.3.1.3.5.1.8zm.1-2.4c-2.5-1.5-6.6-1.6-9-.9-.4.1-.7-.1-.8-.5-.1-.4.1-.7.5-.8 2.7-.8 7.2-.7 10.1 1 .3.2.4.6.2.9-.2.3-.6.4-.9.3h-.1z" fill="white"/></svg>
+          <input type="text" id="s-spotify" placeholder="Spotify URL" oninput="up()"/>
+        </div>
       </div>
     </div>
 
@@ -288,7 +323,7 @@
   </div>
   <div class="modal-actions">
     <button class="btn-close-modal" onclick="closeModal()">✕ Close Preview</button>
-    <a class="btn-wa" href="https://wa.me/918185843878?text=Hey!%20I%20previewed%20my%20LinkDesi%20page%20and%20have%20feedback!" target="_blank">💬 Share Feedback</a>
+    <a class="btn-wa" href="https://wa.me/917893553115?text=Hey!%20I%20previewed%20my%20LinkDesi%20page%20and%20have%20feedback!" target="_blank">💬 Share Feedback</a>
   </div>
 </div>
 
@@ -296,7 +331,7 @@
 
 <script>
 const API_BASE = "https://income-stream-1-1.onrender.com";
-const RAZORPAY_LINK = "";
+const RAZORPAY_LINK = "https://rzp.io/l/YOUR_RAZORPAY_LINK";
 const CLOUDINARY_CLOUD = "da0acvohe";
 const CLOUDINARY_PRESET = "linkdesi_upload";
 
@@ -435,6 +470,8 @@ function buildHTML(small){
   const emoji=document.getElementById('f-emoji').value||'😊';
   const upiOn=document.getElementById('t-upi').checked;
   const waOn=document.getElementById('t-wa').checked;
+  const supportOn=document.getElementById('t-support').checked;
+  const supportNum=document.getElementById('f-support').value;
   const upi=document.getElementById('f-upi').value;
   const wa=document.getElementById('f-wa').value;
   const social=getSocial();
@@ -451,12 +488,19 @@ function buildHTML(small){
     ?`<img src="${photoUrl}" style="width:100%;height:100%;object-fit:cover;"/>`
     :`<span style="font-size:${small?'28px':'44px'}">${emoji}</span>`;
 
-  const socialIcons={instagram:'📸',youtube:'▶️',twitter:'𝕏',linkedin:'💼',telegram:'✈️',spotify:'🎵'};
+  const socialSVGs={
+    instagram:`<svg viewBox="0 0 24 24" style="width:100%;height:100%;" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="ig${Date.now()}" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#ffd676"/><stop offset="25%" stop-color="#f9a43a"/><stop offset="50%" stop-color="#e75480"/><stop offset="75%" stop-color="#a440b5"/><stop offset="100%" stop-color="#6a5af9"/></radialGradient></defs><rect width="24" height="24" rx="6" fill="url(#ig${Date.now()})"/><rect x="6.5" y="6.5" width="11" height="11" rx="3" stroke="white" stroke-width="1.5" fill="none"/><circle cx="12" cy="12" r="3" stroke="white" stroke-width="1.5" fill="none"/><circle cx="16.2" cy="7.8" r="0.8" fill="white"/></svg>`,
+    youtube:`<svg viewBox="0 0 24 24" style="width:100%;height:100%;" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="5" fill="#FF0000"/><path d="M19.5 8s-.2-1.3-.8-1.9c-.7-.8-1.6-.8-2-.8C14.8 5.2 12 5.2 12 5.2s-2.8 0-4.7.1c-.4 0-1.3.1-2 .8-.6.6-.8 1.9-.8 1.9S4.3 9.5 4.3 11v1.4c0 1.5.2 2.9.2 2.9s.2 1.3.8 1.9c.8.8 1.8.7 2.2.8C8.8 18 12 18 12 18s2.8 0 4.7-.1c.4-.1 1.3-.1 2-.8.6-.6.8-1.9.8-1.9s.2-1.4.2-2.9V11c0-1.5-.2-3-.2-3zM10.3 14V9.7l5.3 2.2-5.3 2.1z" fill="white"/></svg>`,
+    twitter:`<svg viewBox="0 0 24 24" style="width:100%;height:100%;" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="5" fill="#000"/><path d="M17.5 4h2.6l-5.7 6.5L21 20h-5.2l-4.1-5.4L7 20H4.4l6.1-7L4 4h5.3l3.7 4.9L17.5 4zm-.9 14.4h1.4L7.4 5.5H5.9l10.7 12.9z" fill="white"/></svg>`,
+    linkedin:`<svg viewBox="0 0 24 24" style="width:100%;height:100%;" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="5" fill="#0A66C2"/><path d="M7.2 9.4H4.8v8.3h2.4V9.4zm-1.2-3.7C5.2 5 4.7 4.5 4 4.5s-1.2.5-1.2 1.2S3.3 6.9 4 6.9s1.2-.5 1.2-1.2h-.2zm15.2 7c0-2.4-1.3-3.5-3-3.5-1.4 0-2 .8-2.4 1.3V9.4h-2.4v8.3h2.4V13c0-.2 0-.4.1-.5.2-.5.7-1 1.4-1 1 0 1.4.8 1.4 1.9v4.3h2.4V13h.1z" fill="white"/></svg>`,
+    telegram:`<svg viewBox="0 0 24 24" style="width:100%;height:100%;" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="5" fill="#229ED9"/><path d="M19.7 5.3c-.2-.2-.6-.3-.9-.1L3.7 11.5c-.3.1-.5.4-.5.8 0 .3.2.6.5.7l3.4 1.2 1.4 4.4c.1.3.4.5.7.5.2 0 .4-.1.5-.3l2-2.1 3.8 2.8c.1.1.3.2.5.2.4 0 .8-.3.9-.7l2.6-12.5c.1-.4 0-.8-.3-1.1zm-8 10.1l-.7 2.3-.8-2.8 6.8-7.3-5.3 7.8z" fill="white"/></svg>`,
+    spotify:`<svg viewBox="0 0 24 24" style="width:100%;height:100%;" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="5" fill="#1DB954"/><path d="M12 4a8 8 0 100 16A8 8 0 0012 4zm3.7 11.5c-.2.2-.4.3-.7.1-1.8-1.1-4.1-1.4-6.8-.7-.3.1-.5-.1-.6-.4-.1-.3.1-.5.4-.6 2.9-.7 5.5-.4 7.5.8.3.1.3.5.2.8zm1-2.3c-.2.2-.5.3-.7.1-2.1-1.3-5.2-1.7-7.6-.9-.3.1-.6-.1-.7-.4-.1-.3.1-.6.4-.7 2.8-.8 6.2-.4 8.5 1.1.3.1.3.5.1.8zm.1-2.4c-2.5-1.5-6.6-1.6-9-.9-.4.1-.7-.1-.8-.5-.1-.4.1-.7.5-.8 2.7-.8 7.2-.7 10.1 1 .3.2.4.6.2.9-.2.3-.6.4-.9.3h-.1z" fill="white"/></svg>`,
+  };
   let socialHTML='';
   const sKeys=Object.keys(social).filter(k=>social[k]);
   if(sKeys.length){
     socialHTML=`<div style="display:flex;gap:8px;margin-bottom:${small?'12px':'18px'};flex-wrap:wrap;justify-content:center;">`;
-    sKeys.forEach(k=>{socialHTML+=`<a href="${social[k]}" target="_blank" style="width:${socW};height:${socW};border-radius:50%;background:${t.soc};display:flex;align-items:center;justify-content:center;font-size:${socS};text-decoration:none;border:1px solid rgba(128,128,128,0.15);">${socialIcons[k]||'🔗'}</a>`;});
+    sKeys.forEach(k=>{socialHTML+=`<a href="${social[k]}" target="_blank" style="width:${socW};height:${socW};border-radius:8px;display:flex;align-items:center;justify-content:center;text-decoration:none;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.12);">${socialSVGs[k]||'🔗'}</a>`;});
     socialHTML+='</div>';
   }
 
@@ -492,7 +536,9 @@ function buildHTML(small){
     <div style="width:100%;">${linksHTML}</div>
     ${prodsHTML}
     <div style="margin-top:auto;padding-top:14px;font-size:9px;color:${t.text};opacity:0.25;text-align:center;">Made with LinkDesi</div>
-  </div>`;
+  </div>
+  ${supportOn&&supportNum?`<a href="https://wa.me/91${supportNum.replace(/\D/g,'')}" target="_blank" style="position:sticky;bottom:12px;display:flex;align-items:center;justify-content:center;gap:6px;background:#25D366;color:white;font-size:${small?'11px':'13px'};font-weight:700;padding:${small?'8px 18px':'11px 24px'};border-radius:100px;box-shadow:0 4px 20px rgba(37,211,102,0.45);text-decoration:none;margin:8px auto 0;width:fit-content;">🎧 Support</a>`:''}
+  `;
 }
 
 function up(){
@@ -535,6 +581,7 @@ async function saveAndPublish(){
       products:products.filter(p=>p.title).map(p=>({title:p.title,price:p.price,upi_id:p.upi})),
       upi_id:document.getElementById('t-upi').checked?document.getElementById('f-upi').value:'',
       whatsapp:document.getElementById('t-wa').checked?document.getElementById('f-wa').value:'',
+      support_wa:document.getElementById('t-support').checked?document.getElementById('f-support').value:'',
     };
     const res=await fetch(`${API_BASE}/page`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     if(!res.ok){const e=await res.json();throw new Error(e.detail||'Save failed');}

@@ -22,7 +22,7 @@
 
     /* SOCIAL ICONS */
     .social-row{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;justify-content:center;}
-    .social-icon-btn{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;text-decoration:none;transition:transform 0.2s,box-shadow 0.2s;border:1px solid rgba(128,128,128,0.15);}
+    .social-icon-btn{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:transform 0.2s,box-shadow 0.2s;overflow:hidden;}
     .social-icon-btn:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,0.15);}
 
     /* LINKS */
@@ -50,6 +50,19 @@
     .product-price{font-size:18px;font-weight:800;}
     .product-buy{display:block;width:100%;padding:11px;border-radius:10px;font-size:13px;font-weight:700;text-align:center;text-decoration:none;transition:opacity 0.2s,transform 0.2s;color:white;}
     .product-buy:hover{opacity:0.9;transform:translateY(-1px);}
+
+    /* SUPPORT FAB */
+    .support-fab{
+      display:inline-flex;align-items:center;gap:8px;
+      background:#25D366;color:white;
+      font-size:14px;font-weight:700;
+      padding:13px 28px;border-radius:100px;
+      text-decoration:none;
+      box-shadow:0 6px 24px rgba(37,211,102,0.45);
+      transition:transform 0.2s,box-shadow 0.2s;
+      margin-top:20px;
+    }
+    .support-fab:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(37,211,102,0.55);}
 
     /* VISITOR COUNTER */
     .visitor-count{margin-top:8px;font-size:11px;opacity:0.35;text-align:center;}
@@ -137,7 +150,7 @@ function renderPage(data) {
   if (socialKeys.length) {
     socialHTML = `<div class="social-row animate" style="animation-delay:0.3s">`;
     socialKeys.forEach(k => {
-      socialHTML += `<a class="social-icon-btn" href="${esc(social[k])}" target="_blank" rel="noopener" style="background:${t.social};color:${t.text};">${socialIcons[k]||'🔗'}</a>`;
+      socialHTML += `<a class="social-icon-btn" href="${esc(social[k])}" target="_blank" rel="noopener" style="overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.15);">${socialSVGs[k]||'🔗'}</a>`;
     });
     socialHTML += `</div>`;
   }
@@ -181,8 +194,18 @@ function renderPage(data) {
     productsHTML += `</div>`;
   }
 
+  // Support button
+  let supporthtml = '';
+  if (data.support_wa) {
+    const num = data.support_wa.replace(/\D/g,'');
+    supportHTML = `<a href="https://wa.me/91${num}" target="_blank" style="position:sticky;bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px;background:#25D366;color:white;font-size:14px;font-weight:700;padding:11px 28px;border-radius:100px;box-shadow:0 4px 20px rgba(37,211,102,0.4);text-decoration:none;margin:12px auto 0;width:fit-content;">🎧 Support</a>`;
+  }
+
   // Visitor count
   const visits = data.visits || 0;
+  const supportWa = data.support_wa || '';
+  const supportHTML = supportWa ? `<a href="https://wa.me/91${supportWa.replace(/\D/g,'')}" target="_blank" class="support-fab animate" style="animation-delay:0.75s;">🎧 Support</a>` : '';
+
   const visitorHTML = `<div class="visitor-count" style="color:${t.text}">👁 ${visits.toLocaleString('en-IN')} visits</div>`;
 
   document.getElementById('root').innerHTML = `
@@ -195,7 +218,9 @@ function renderPage(data) {
       ${socialHTML}
       <div class="links-wrap">${linksHTML}</div>
       ${productsHTML}
+      ${supportHTML}
       ${visitorHTML}
+      ${supportHTML}
       <div class="footer animate" style="animation-delay:0.7s">
         <a href="index.html" style="color:${t.text}">⚡ Create your free LinkDesi page</a>
       </div>
