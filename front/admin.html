@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LinkDesi Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0a0a; --surface: #111; --surface2: #1a1a1a;
+      --border: #222; --ink: #f0ede8; --muted: #666;
+      --primary: #ff4d00; --green: #00c896; --yellow: #f5a623; --red: #ff4d4d;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body { background:var(--bg); color:var(--ink); font-family:'Plus Jakarta Sans',sans-serif; min-height:100vh; }
+
+    /* LOGIN */
+    .login-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .login-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+    }
+
+    .login-logo { font-family:'Fraunces',serif; font-size:28px; color:var(--ink); margin-bottom:8px; }
+    .login-logo span { color:var(--primary); }
+    .login-sub { font-size:14px; color:var(--muted); margin-bottom:32px; }
+
+    .login-field { margin-bottom:16px; }
+    .login-field input {
+      width:100%; padding:12px 16px;
+      background:var(--surface2); border:1px solid var(--border);
+      color:var(--ink); font-family:'Plus Jakarta Sans',sans-serif; font-size:14px;
+      outline:none; border-radius:10px; transition:border-color 0.2s;
+    }
+    .login-field input:focus { border-color:var(--primary); }
+
+    .btn-login {
+      width:100%; padding:14px; background:var(--primary); color:white;
+      font-size:15px; font-weight:700; border:none; border-radius:100px;
+      cursor:pointer; transition:all 0.2s; margin-top:8px;
+    }
+    .btn-login:hover { background:#e04400; }
+    .login-err { font-size:13px; color:var(--red); margin-top:10px; }
+
+    /* DASHBOARD */
+    #dashboard { display:none; }
+
+    .topbar {
+      height:56px; background:var(--surface);
+      border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 28px; position:sticky; top:0; z-index:100;
+    }
+
+    .topbar-logo { font-family:'Fraunces',serif; font-size:20px; color:var(--ink); }
+    .topbar-logo span { color:var(--primary); }
+    .topbar-right { display:flex; align-items:center; gap:16px; }
+
+    .admin-badge {
+      font-size:11px; font-weight:700; background:var(--primary);
+      color:white; padding:3px 10px; border-radius:100px; letter-spacing:0.05em;
+    }
+
+    .btn-logout {
+      font-size:12px; color:var(--muted); background:none; border:none;
+      cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif;
+    }
+    .btn-logout:hover { color:var(--ink); }
+
+    .main { padding:28px; max-width:1200px; margin:0 auto; }
+
+    /* STATS GRID */
+    .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:32px; }
+
+    .stat-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:16px; padding:24px;
+      transition:border-color 0.2s;
+    }
+
+    .stat-card:hover { border-color:#333; }
+
+    .stat-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin-bottom:10px; }
+    .stat-value { font-size:36px; font-weight:800; letter-spacing:-0.02em; line-height:1; margin-bottom:6px; }
+    .stat-change { font-size:12px; font-weight:600; }
+    .stat-change.up { color:var(--green); }
+    .stat-change.down { color:var(--red); }
+    .stat-change.neutral { color:var(--muted); }
+
+    /* SECTION */
+    .section { margin-bottom:32px; }
+
+    .section-header {
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom:16px;
+    }
+
+    .section-title { font-size:16px; font-weight:700; }
+
+    .btn-action {
+      font-size:12px; font-weight:600; padding:7px 16px;
+      background:var(--surface2); color:var(--ink);
+      border:1px solid var(--border); border-radius:100px;
+      cursor:pointer; transition:all 0.2s;
+    }
+    .btn-action:hover { border-color:#444; }
+
+    /* TABLE */
+    .table-wrap { background:var(--surface); border:1px solid var(--border); border-radius:16px; overflow:hidden; }
+
+    table { width:100%; border-collapse:collapse; }
+
+    thead th {
+      font-size:11px; font-weight:700; text-transform:uppercase;
+      letter-spacing:0.1em; color:var(--muted);
+      padding:14px 20px; text-align:left;
+      border-bottom:1px solid var(--border);
+      background:var(--surface2);
+    }
+
+    tbody tr { border-bottom:1px solid var(--border); transition:background 0.15s; }
+    tbody tr:last-child { border-bottom:none; }
+    tbody tr:hover { background:var(--surface2); }
+
+    td { padding:14px 20px; font-size:13px; }
+
+    .badge {
+      display:inline-block; font-size:11px; font-weight:700;
+      padding:3px 10px; border-radius:100px; text-transform:uppercase; letter-spacing:0.05em;
+    }
+
+    .badge-active { background:rgba(0,200,150,0.15); color:var(--green); }
+    .badge-expired { background:rgba(255,77,77,0.15); color:var(--red); }
+    .badge-pending { background:rgba(245,166,35,0.15); color:var(--yellow); }
+
+    .user-name { font-weight:600; color:var(--ink); }
+    .user-username { font-size:12px; color:var(--muted); }
+
+    .days-left { font-weight:600; }
+    .days-left.urgent { color:var(--red); }
+    .days-left.warning { color:var(--yellow); }
+    .days-left.ok { color:var(--green); }
+
+    .btn-activate {
+      font-size:11px; font-weight:700; padding:5px 12px;
+      background:var(--green); color:white;
+      border:none; border-radius:100px; cursor:pointer; transition:all 0.2s;
+    }
+    .btn-activate:hover { opacity:0.85; }
+
+    .btn-deactivate {
+      font-size:11px; font-weight:700; padding:5px 12px;
+      background:rgba(255,77,77,0.15); color:var(--red);
+      border:1px solid rgba(255,77,77,0.3); border-radius:100px; cursor:pointer;
+    }
+
+    .btn-view-page {
+      font-size:11px; font-weight:600; padding:5px 12px;
+      background:transparent; color:var(--muted);
+      border:1px solid var(--border); border-radius:100px;
+      cursor:pointer; text-decoration:none; transition:all 0.2s;
+    }
+    .btn-view-page:hover { color:var(--ink); border-color:#444; }
+
+    .action-btns { display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+
+    /* REFRESH */
+    .btn-refresh {
+      font-size:12px; font-weight:600; padding:7px 16px;
+      background:var(--primary); color:white;
+      border:none; border-radius:100px; cursor:pointer; transition:all 0.2s;
+    }
+    .btn-refresh:hover { background:#e04400; }
+
+    /* EMPTY */
+    .empty-state { padding:48px; text-align:center; color:var(--muted); font-size:14px; }
+
+    /* LOADING */
+    .spinner {
+      width:20px; height:20px;
+      border:2px solid rgba(255,255,255,0.1);
+      border-top-color:var(--primary);
+      border-radius:50%;
+      animation:spin 0.8s linear infinite;
+      display:inline-block;
+    }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    /* TOAST */
+    .toast {
+      position:fixed; bottom:24px; left:50%;
+      transform:translateX(-50%) translateY(80px);
+      background:var(--surface); color:var(--ink);
+      border:1px solid var(--border);
+      padding:12px 24px; border-radius:100px;
+      font-size:14px; font-weight:600;
+      transition:transform 0.3s ease; z-index:999;
+    }
+    .toast.show { transform:translateX(-50%) translateY(0); }
+    .toast.success { border-color:var(--green); color:var(--green); }
+    .toast.error { border-color:var(--red); color:var(--red); }
+
+    @media (max-width:900px) {
+      .stats-grid { grid-template-columns:repeat(2,1fr); }
+    }
+    @media (max-width:600px) {
+      .stats-grid { grid-template-columns:1fr 1fr; }
+      .main { padding:16px; }
+      .topbar { padding:0 16px; }
+      thead th:nth-child(3), thead th:nth-child(4), td:nth-child(3), td:nth-child(4) { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="login-wrap">
+  <div class="login-card">
+    <div class="login-logo">Link<span>Desi</span></div>
+    <div class="login-sub">Admin Dashboard</div>
+    <div class="login-field">
+      <input type="password" id="admin-pass" placeholder="Enter admin password" onkeydown="if(event.key==='Enter') login()" />
+    </div>
+    <button class="btn-login" onclick="login()">Login →</button>
+    <div class="login-err" id="login-err"></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <div class="topbar">
+    <div class="topbar-logo">Link<span>Desi</span></div>
+    <div class="topbar-right">
+      <span class="admin-badge">ADMIN</span>
+      <button class="btn-logout" onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total Users</div>
+        <div class="stat-value" id="stat-total">—</div>
+        <div class="stat-change neutral" id="stat-total-sub">loading...</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Active (Paid)</div>
+        <div class="stat-value" style="color:var(--green)" id="stat-active">—</div>
+        <div class="stat-change neutral" id="stat-active-sub">loading...</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">MRR</div>
+        <div class="stat-value" style="color:var(--primary)" id="stat-mrr">—</div>
+        <div class="stat-change neutral">₹99 × active users</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Renewing Soon</div>
+        <div class="stat-value" style="color:var(--yellow)" id="stat-renew">—</div>
+        <div class="stat-change neutral">within 7 days</div>
+      </div>
+    </div>
+
+    <!-- USERS TABLE -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">All Users</div>
+        <button class="btn-refresh" onclick="loadData()">↻ Refresh</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Status</th>
+              <th>Joined</th>
+              <th>Renews / Expired</th>
+              <th>Days Left</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="users-tbody">
+            <tr><td colspan="6"><div class="empty-state"><div class="spinner"></div></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const API_BASE = "https://income-stream-1-1.onrender.com";
+  const ADMIN_PASSWORD = "linkdesi2026"; // CHANGE THIS
+
+  function login() {
+    const pass = document.getElementById('admin-pass').value;
+    if (pass === ADMIN_PASSWORD) {
+      document.getElementById('login-wrap').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      loadData();
+    } else {
+      document.getElementById('login-err').textContent = 'Wrong password.';
+    }
+  }
+
+  function logout() {
+    document.getElementById('login-wrap').style.display = 'flex';
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('admin-pass').value = '';
+  }
+
+  async function loadData() {
+    try {
+      const res = await fetch(`${API_BASE}/admin/users`, {
+        headers: { 'X-Admin-Key': ADMIN_PASSWORD }
+      });
+
+      if (!res.ok) throw new Error('API error');
+      const users = await res.json();
+      renderStats(users);
+      renderTable(users);
+    } catch(e) {
+      showToast('Failed to load data', 'error');
+      document.getElementById('users-tbody').innerHTML =
+        '<tr><td colspan="6"><div class="empty-state">Could not load users. Check your backend.</div></td></tr>';
+    }
+  }
+
+  function renderStats(users) {
+    const total   = users.length;
+    const active  = users.filter(u => u.is_active).length;
+    const mrr     = active * 99;
+    const now     = new Date();
+    const renewing = users.filter(u => {
+      if (!u.is_active || !u.expires_at) return false;
+      const exp = new Date(u.expires_at);
+      const diff = (exp - now) / (1000 * 60 * 60 * 24);
+      return diff >= 0 && diff <= 7;
+    }).length;
+
+    document.getElementById('stat-total').textContent = total;
+    document.getElementById('stat-total-sub').textContent = `${users.filter(u=>!u.is_active).length} pending`;
+    document.getElementById('stat-active').textContent = active;
+    document.getElementById('stat-active-sub').textContent = `${total - active} inactive`;
+    document.getElementById('stat-mrr').textContent = `₹${mrr.toLocaleString('en-IN')}`;
+    document.getElementById('stat-renew').textContent = renewing;
+  }
+
+  function renderTable(users) {
+    const tbody = document.getElementById('users-tbody');
+    if (!users.length) {
+      tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state">No users yet.</div></td></tr>';
+      return;
+    }
+
+    const now = new Date();
+    tbody.innerHTML = users.map(u => {
+      const joined   = u.created_at ? new Date(u.created_at).toLocaleDateString('en-IN') : '—';
+      const expires  = u.expires_at ? new Date(u.expires_at) : null;
+      const daysLeft = expires ? Math.ceil((expires - now) / (1000 * 60 * 60 * 24)) : null;
+      const expiresStr = expires ? expires.toLocaleDateString('en-IN') : '—';
+
+      let daysClass = 'ok', daysText = '—';
+      if (daysLeft !== null) {
+        daysText = daysLeft < 0 ? `${Math.abs(daysLeft)}d ago` : `${daysLeft}d`;
+        daysClass = daysLeft < 0 ? 'urgent' : daysLeft <= 7 ? 'warning' : 'ok';
+      }
+
+      const statusBadge = u.is_active
+        ? '<span class="badge badge-active">Active</span>'
+        : (u.expires_at && daysLeft < 0)
+          ? '<span class="badge badge-expired">Expired</span>'
+          : '<span class="badge badge-pending">Pending</span>';
+
+      const activateBtn = !u.is_active
+        ? `<button class="btn-activate" onclick="activateUser('${u.username}')">Activate</button>`
+        : `<button class="btn-deactivate" onclick="deactivateUser('${u.username}')">Deactivate</button>`;
+
+      return `
+        <tr>
+          <td>
+            <div class="user-name">${escHtml(u.name||'—')}</div>
+            <div class="user-username">@${escHtml(u.username)}</div>
+          </td>
+          <td>${statusBadge}</td>
+          <td>${joined}</td>
+          <td>${expiresStr}</td>
+          <td><span class="days-left ${daysClass}">${daysText}</span></td>
+          <td>
+            <div class="action-btns">
+              ${activateBtn}
+              <a class="btn-view-page" href="page.html?u=${encodeURIComponent(u.username)}" target="_blank">View →</a>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  async function activateUser(username) {
+    try {
+      const res = await fetch(`${API_BASE}/activate/${username}`, {
+        method: 'POST',
+        headers: { 'X-Admin-Key': ADMIN_PASSWORD }
+      });
+      if (!res.ok) throw new Error();
+      showToast(`✅ ${username} activated`, 'success');
+      setTimeout(loadData, 800);
+    } catch(e) {
+      showToast('Failed to activate', 'error');
+    }
+  }
+
+  async function deactivateUser(username) {
+    if (!confirm(`Deactivate @${username}?`)) return;
+    try {
+      const res = await fetch(`${API_BASE}/deactivate/${username}`, {
+        method: 'POST',
+        headers: { 'X-Admin-Key': ADMIN_PASSWORD }
+      });
+      if (!res.ok) throw new Error();
+      showToast(`@${username} deactivated`, 'success');
+      setTimeout(loadData, 800);
+    } catch(e) {
+      showToast('Failed to deactivate', 'error');
+    }
+  }
+
+  function escHtml(str) {
+    return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function showToast(msg, type='') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast show' + (type ? ' '+type : '');
+    setTimeout(() => t.className='toast', 3000);
+  }
+</script>
+</body>
+</html>

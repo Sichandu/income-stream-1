@@ -7,382 +7,122 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:ital,wght@0,700;1,400&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #f5f3ef;
-      --ink: #0f0e0c;
-      --primary: #ff4d00;
-      --secondary: #00c896;
-      --border: #e0dbd2;
-      --card: #ffffff;
-      --muted: #8a8070;
+      --bg: #f5f3ef; --ink: #0f0e0c; --primary: #ff4d00;
+      --border: #e0dbd2; --card: #ffffff; --muted: #8a8070;
       --sidebar: 360px;
     }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--bg); color:var(--ink); font-family:'Plus Jakarta Sans',sans-serif; height:100vh; overflow:hidden; display:flex; flex-direction:column; }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    /* TOPBAR */
+    .topbar { height:56px; background:var(--ink); display:flex; align-items:center; justify-content:space-between; padding:0 24px; flex-shrink:0; z-index:10; }
+    .topbar-logo { font-family:'Fraunces',serif; font-size:20px; color:white; text-decoration:none; }
+    .topbar-logo span { color:var(--primary); }
+    .topbar-actions { display:flex; align-items:center; gap:10px; }
+    .btn-preview { background:transparent; color:white; font-size:13px; font-weight:600; padding:7px 16px; border:1px solid rgba(255,255,255,0.3); border-radius:100px; cursor:pointer; transition:all 0.2s; }
+    .btn-preview:hover { background:rgba(255,255,255,0.1); border-color:white; }
+    .btn-publish { background:var(--primary); color:white; font-size:13px; font-weight:700; padding:8px 20px; border:none; border-radius:100px; cursor:pointer; transition:all 0.2s; }
+    .btn-publish:hover { background:#e04400; }
+    .btn-publish:disabled { opacity:0.5; cursor:not-allowed; }
 
-    body {
-      background: var(--bg);
-      color: var(--ink);
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
+    /* BUILDER */
+    .builder { display:grid; grid-template-columns:var(--sidebar) 1fr; flex:1; overflow:hidden; }
 
-    .topbar {
-      height: 56px;
-      background: var(--ink);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 24px;
-      flex-shrink: 0;
-      z-index: 10;
-    }
+    /* SIDEBAR */
+    .sidebar { background:var(--card); border-right:1px solid var(--border); overflow-y:auto; display:flex; flex-direction:column; }
+    .sidebar::-webkit-scrollbar { width:4px; }
+    .sidebar::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
 
-    .topbar-logo { font-family: 'Fraunces', serif; font-size: 20px; color: white; text-decoration: none; }
-    .topbar-logo span { color: var(--primary); }
+    .tabs { display:flex; border-bottom:1px solid var(--border); flex-shrink:0; }
+    .tab { flex:1; padding:14px 8px; font-size:12px; font-weight:600; text-align:center; cursor:pointer; color:var(--muted); border-bottom:2px solid transparent; transition:all 0.2s; }
+    .tab.active { color:var(--ink); border-bottom-color:var(--primary); }
+    .tab-content { display:none; padding:20px; flex:1; }
+    .tab-content.active { display:block; }
 
-    .topbar-actions { display: flex; align-items: center; gap: 12px; }
+    /* FIELDS */
+    .field { margin-bottom:18px; }
+    .field label { display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin-bottom:6px; }
+    .field input, .field textarea { width:100%; padding:10px 14px; background:var(--bg); border:1px solid var(--border); color:var(--ink); font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; outline:none; border-radius:8px; transition:border-color 0.2s; }
+    .field input:focus, .field textarea:focus { border-color:var(--primary); }
+    .field textarea { resize:vertical; min-height:70px; }
+    .field-hint { font-size:11px; color:var(--muted); margin-top:4px; }
+    .username-row { position:relative; }
+    .username-status { position:absolute; right:12px; top:50%; transform:translateY(-50%); font-size:16px; }
 
-    .btn-publish {
-      background: var(--primary);
-      color: white;
-      font-size: 13px;
-      font-weight: 700;
-      padding: 8px 20px;
-      border: none;
-      border-radius: 100px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
+    /* THEMES */
+    .themes-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-bottom:20px; }
+    .theme-dot { aspect-ratio:1; border-radius:50%; cursor:pointer; border:3px solid transparent; transition:all 0.2s; }
+    .theme-dot.active { border-color:var(--ink); transform:scale(1.15); }
+    .theme-dot:hover { transform:scale(1.1); }
 
-    .btn-publish:hover { background: #e04400; }
-    .btn-publish:disabled { opacity: 0.5; cursor: not-allowed; }
+    /* LINKS */
+    .links-list { margin-bottom:16px; }
+    .link-item { background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:12px; margin-bottom:8px; position:relative; }
+    .link-item input { width:100%; padding:7px 10px; background:white; border:1px solid var(--border); border-radius:6px; font-size:13px; font-family:'Plus Jakarta Sans',sans-serif; color:var(--ink); outline:none; margin-bottom:6px; }
+    .link-item input:last-child { margin-bottom:0; }
+    .link-item input:focus { border-color:var(--primary); }
+    .link-remove { position:absolute; top:8px; right:8px; background:none; border:none; cursor:pointer; color:var(--muted); font-size:16px; padding:2px; }
+    .link-remove:hover { color:var(--primary); }
+    .btn-add-link { width:100%; padding:10px; background:transparent; border:2px dashed var(--border); border-radius:10px; font-size:13px; font-weight:600; color:var(--muted); cursor:pointer; transition:all 0.2s; }
+    .btn-add-link:hover { border-color:var(--primary); color:var(--primary); }
 
-    .builder {
-      display: grid;
-      grid-template-columns: var(--sidebar) 1fr;
-      flex: 1;
-      overflow: hidden;
-    }
+    /* TOGGLES */
+    .special-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin:12px 0 10px; }
+    .toggle-row { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border); }
+    .toggle-label { font-size:14px; font-weight:500; }
+    .toggle-sub { font-size:11px; color:var(--muted); }
+    .toggle { position:relative; width:40px; height:22px; flex-shrink:0; }
+    .toggle input { opacity:0; width:0; height:0; }
+    .toggle-slider { position:absolute; inset:0; background:var(--border); border-radius:22px; cursor:pointer; transition:0.2s; }
+    .toggle-slider::before { content:''; position:absolute; width:16px; height:16px; left:3px; bottom:3px; background:white; border-radius:50%; transition:0.2s; }
+    .toggle input:checked + .toggle-slider { background:var(--primary); }
+    .toggle input:checked + .toggle-slider::before { transform:translateX(18px); }
+    .toggle-input-wrap { margin-top:8px; display:none; }
+    .toggle-input-wrap.active { display:block; }
+    .toggle-input-wrap input { width:100%; padding:8px 12px; background:var(--bg); border:1px solid var(--border); border-radius:8px; font-size:13px; font-family:'Plus Jakarta Sans',sans-serif; color:var(--ink); outline:none; }
 
-    .sidebar {
-      background: var(--card);
-      border-right: 1px solid var(--border);
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-    }
+    /* SUPPORT BOX */
+    .support-box { margin-top:20px; padding:14px; background:#f0fdf4; border-radius:10px; border:1px solid #bbf7d0; }
+    .support-box .sup-title { font-size:12px; font-weight:700; color:#166534; margin-bottom:6px; }
+    .support-box a { display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:#15803d; text-decoration:none; }
 
-    .sidebar::-webkit-scrollbar { width: 4px; }
-    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    /* DESKTOP PREVIEW */
+    .preview-panel { display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--bg); padding:32px; overflow:hidden; }
+    .preview-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.15em; color:var(--muted); margin-bottom:24px; }
+    .phone-mockup { width:280px; background:#1a1a1a; border-radius:40px; padding:14px; box-shadow:0 40px 80px rgba(0,0,0,0.25); position:relative; }
+    .phone-notch { width:80px; height:24px; background:#1a1a1a; border-radius:0 0 16px 16px; position:absolute; top:14px; left:50%; transform:translateX(-50%); z-index:2; }
+    .phone-screen { background:white; border-radius:28px; overflow:hidden; aspect-ratio:9/19.5; position:relative; }
+    #preview-page { height:100%; overflow-y:auto; padding:40px 20px 24px; display:flex; flex-direction:column; align-items:center; transition:background 0.3s; }
+    #preview-page::-webkit-scrollbar { display:none; }
+    .preview-avatar { width:72px; height:72px; border-radius:50%; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-size:36px; margin-bottom:10px; border:3px solid rgba(255,255,255,0.3); }
+    .preview-name { font-size:16px; font-weight:800; color:white; margin-bottom:4px; text-align:center; }
+    .preview-bio { font-size:12px; color:rgba(255,255,255,0.75); text-align:center; margin-bottom:20px; line-height:1.5; }
+    .preview-link { width:100%; padding:11px 16px; border-radius:10px; font-size:12px; font-weight:600; text-align:center; margin-bottom:8px; background:rgba(255,255,255,0.2); color:white; border:1px solid rgba(255,255,255,0.25); text-decoration:none; display:block; }
+    .preview-link.whatsapp { background:#25D366; border-color:#25D366; }
+    .preview-link.upi { background:#6739b7; border-color:#6739b7; }
+    .preview-footer { margin-top:auto; padding-top:16px; font-size:10px; color:rgba(255,255,255,0.4); text-align:center; }
 
-    .tabs { display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0; }
-
-    .tab {
-      flex: 1;
-      padding: 14px 8px;
-      font-size: 12px;
-      font-weight: 600;
-      text-align: center;
-      cursor: pointer;
-      color: var(--muted);
-      border-bottom: 2px solid transparent;
-      transition: all 0.2s;
-    }
-
-    .tab.active { color: var(--ink); border-bottom-color: var(--primary); }
-
-    .tab-content { display: none; padding: 20px; flex: 1; }
-    .tab-content.active { display: block; }
-
-    .field { margin-bottom: 18px; }
-
-    .field label {
-      display: block;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-
-    .field input, .field textarea {
-      width: 100%;
-      padding: 10px 14px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--ink);
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 14px;
-      outline: none;
-      border-radius: 8px;
-      transition: border-color 0.2s;
-    }
-
-    .field input:focus, .field textarea:focus { border-color: var(--primary); }
-    .field textarea { resize: vertical; min-height: 70px; }
-
-    .username-row { position: relative; }
-
-    .username-status {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 16px;
-    }
-
-    .field-hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
-
-    .themes-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 20px; }
-
-    .theme-dot {
-      aspect-ratio: 1;
-      border-radius: 50%;
-      cursor: pointer;
-      border: 3px solid transparent;
-      transition: all 0.2s;
-    }
-
-    .theme-dot.active { border-color: var(--ink); transform: scale(1.15); }
-    .theme-dot:hover { transform: scale(1.1); }
-
-    .links-list { margin-bottom: 16px; }
-
-    .link-item {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px;
-      margin-bottom: 8px;
-      position: relative;
-    }
-
-    .link-item input {
-      width: 100%;
-      padding: 7px 10px;
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: 13px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      color: var(--ink);
-      outline: none;
-      margin-bottom: 6px;
-    }
-
-    .link-item input:last-child { margin-bottom: 0; }
-    .link-item input:focus { border-color: var(--primary); }
-
-    .link-remove {
-      position: absolute;
-      top: 8px; right: 8px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--muted);
-      font-size: 16px;
-      padding: 2px;
-    }
-
-    .link-remove:hover { color: var(--primary); }
-
-    .btn-add-link {
-      width: 100%;
-      padding: 10px;
-      background: transparent;
-      border: 2px dashed var(--border);
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--muted);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .btn-add-link:hover { border-color: var(--primary); color: var(--primary); }
-
-    .special-title {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--muted);
-      margin-bottom: 10px;
-      margin-top: 8px;
-    }
-
-    .toggle-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .toggle-label { font-size: 14px; font-weight: 500; }
-    .toggle-sub { font-size: 11px; color: var(--muted); }
-
-    .toggle { position: relative; width: 40px; height: 22px; flex-shrink: 0; }
-    .toggle input { opacity: 0; width: 0; height: 0; }
-
-    .toggle-slider {
-      position: absolute;
-      inset: 0;
-      background: var(--border);
-      border-radius: 22px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .toggle-slider::before {
-      content: '';
-      position: absolute;
-      width: 16px; height: 16px;
-      left: 3px; bottom: 3px;
-      background: white;
-      border-radius: 50%;
-      transition: 0.2s;
-    }
-
-    .toggle input:checked + .toggle-slider { background: var(--primary); }
-    .toggle input:checked + .toggle-slider::before { transform: translateX(18px); }
-
-    .toggle-input-wrap { margin-top: 8px; display: none; }
-    .toggle-input-wrap.active { display: block; }
-
-    .toggle-input-wrap input {
-      width: 100%;
-      padding: 8px 12px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 13px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      color: var(--ink);
-      outline: none;
-    }
-
-    /* PREVIEW */
-    .preview-panel {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg);
-      padding: 32px;
-      overflow: hidden;
-    }
-
-    .preview-label {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      color: var(--muted);
-      margin-bottom: 24px;
-    }
-
-    .phone-mockup {
-      width: 280px;
-      background: #1a1a1a;
-      border-radius: 40px;
-      padding: 14px;
-      box-shadow: 0 40px 80px rgba(0,0,0,0.25);
-    }
-
-    .phone-notch {
-      width: 80px; height: 24px;
-      background: #1a1a1a;
-      border-radius: 0 0 16px 16px;
-      position: absolute;
-      top: 14px; left: 50%;
-      transform: translateX(-50%);
-      z-index: 2;
-    }
-
-    .phone-screen {
-      background: white;
-      border-radius: 28px;
-      overflow: hidden;
-      aspect-ratio: 9/19.5;
-      position: relative;
-    }
-
-    #preview-page {
-      height: 100%;
-      overflow-y: auto;
-      padding: 40px 20px 24px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      transition: background 0.3s;
-    }
-
-    #preview-page::-webkit-scrollbar { display: none; }
-
-    .preview-avatar {
-      width: 72px; height: 72px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 36px;
-      margin-bottom: 10px;
-      border: 3px solid rgba(255,255,255,0.3);
-    }
-
-    .preview-name { font-size: 16px; font-weight: 800; color: white; margin-bottom: 4px; text-align: center; }
-    .preview-bio { font-size: 12px; color: rgba(255,255,255,0.75); text-align: center; margin-bottom: 20px; line-height: 1.5; }
-
-    .preview-link {
-      width: 100%;
-      padding: 11px 16px;
-      border-radius: 10px;
-      font-size: 12px;
-      font-weight: 600;
-      text-align: center;
-      margin-bottom: 8px;
-      background: rgba(255,255,255,0.2);
-      color: white;
-      border: 1px solid rgba(255,255,255,0.25);
-      cursor: pointer;
-      text-decoration: none;
-      display: block;
-    }
-
-    .preview-link.whatsapp { background: #25D366; border-color: #25D366; }
-    .preview-link.upi { background: #6739b7; border-color: #6739b7; }
-
-    .preview-footer { margin-top: auto; padding-top: 16px; font-size: 10px; color: rgba(255,255,255,0.4); text-align: center; }
+    /* MOBILE PREVIEW MODAL */
+    .preview-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.88); z-index:200; align-items:center; justify-content:center; flex-direction:column; gap:20px; }
+    .preview-modal.active { display:flex; }
+    .preview-modal-phone { width:min(320px,85vw); background:#1a1a1a; border-radius:40px; padding:14px; box-shadow:0 40px 80px rgba(0,0,0,0.5); position:relative; }
+    .preview-modal-phone .pn { width:80px; height:24px; background:#1a1a1a; border-radius:0 0 16px 16px; position:absolute; top:14px; left:50%; transform:translateX(-50%); z-index:2; }
+    .preview-modal-screen { background:white; border-radius:28px; overflow:hidden; aspect-ratio:9/19.5; }
+    #modal-preview-page { height:100%; overflow-y:auto; padding:40px 20px 24px; display:flex; flex-direction:column; align-items:center; }
+    #modal-preview-page::-webkit-scrollbar { display:none; }
+    .preview-modal-actions { display:flex; flex-direction:column; align-items:center; gap:10px; }
+    .btn-close-preview { background:white; color:#333; font-size:14px; font-weight:700; padding:12px 32px; border:none; border-radius:100px; cursor:pointer; }
+    .btn-feedback-wa { display:flex; align-items:center; gap:8px; background:#25D366; color:white; font-size:13px; font-weight:600; padding:10px 24px; border:none; border-radius:100px; cursor:pointer; text-decoration:none; }
 
     /* TOAST */
-    .toast {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      background: var(--ink);
-      color: white;
-      padding: 12px 24px;
-      border-radius: 100px;
-      font-size: 14px;
-      font-weight: 600;
-      transition: transform 0.3s ease;
-      z-index: 999;
-    }
+    .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--ink); color:white; padding:12px 24px; border-radius:100px; font-size:14px; font-weight:600; transition:transform 0.3s ease; z-index:999; }
+    .toast.show { transform:translateX(-50%) translateY(0); }
+    .toast.error { background:#e53e3e; }
 
-    .toast.show { transform: translateX(-50%) translateY(0); }
-    .toast.error { background: #e53e3e; }
-
-    @media (max-width: 768px) {
-      .builder { grid-template-columns: 1fr; }
-      .preview-panel { display: none; }
-      body { overflow: auto; }
+    @media (max-width:768px) {
+      .builder { grid-template-columns:1fr; }
+      .preview-panel { display:none; }
+      body { overflow:auto; height:auto; }
     }
   </style>
 </head>
@@ -391,7 +131,8 @@
 <div class="topbar">
   <a href="index.html" class="topbar-logo">Link<span>Desi</span></a>
   <div class="topbar-actions">
-    <button class="btn-publish" id="publish-btn" onclick="saveAndPublish()">Publish — ₹149/mo</button>
+    <button class="btn-preview" onclick="openPreviewModal()">👁 Preview</button>
+    <button class="btn-publish" id="publish-btn" onclick="saveAndPublish()">Publish — ₹99/mo</button>
   </div>
 </div>
 
@@ -403,13 +144,11 @@
       <div class="tab" onclick="switchTab('design')">🎨 Design</div>
     </div>
 
-    <!-- PROFILE TAB -->
     <div class="tab-content active" id="tab-profile">
       <div class="field">
         <label>Username <span style="color:var(--primary)">*</span></label>
         <div class="username-row">
-          <input type="text" id="f-username" placeholder="e.g. priyamusic"
-            oninput="onUsernameInput()" style="padding-right:36px" />
+          <input type="text" id="f-username" placeholder="e.g. priyamusic" oninput="onUsernameInput()" style="padding-right:36px" />
           <span class="username-status" id="username-status"></span>
         </div>
         <div class="field-hint">Your page: <strong>linkdesi.in/<span id="username-preview">yourname</span></strong></div>
@@ -426,45 +165,32 @@
         <label>Profile Emoji</label>
         <input type="text" id="f-emoji" placeholder="e.g. 🎵 or 📸 or 🍳" maxlength="2" oninput="updatePreview()" />
       </div>
-
       <div class="special-title">⚡ Special Indian Buttons</div>
-
       <div class="toggle-row">
-        <div>
-          <div class="toggle-label">💸 UPI Payment</div>
-          <div class="toggle-sub">Let followers pay you directly</div>
-        </div>
-        <label class="toggle">
-          <input type="checkbox" id="toggle-upi" onchange="toggleSpecial('upi')" />
-          <span class="toggle-slider"></span>
-        </label>
+        <div><div class="toggle-label">💸 UPI Payment</div><div class="toggle-sub">Let followers pay you directly</div></div>
+        <label class="toggle"><input type="checkbox" id="toggle-upi" onchange="toggleSpecial('upi')" /><span class="toggle-slider"></span></label>
       </div>
       <div class="toggle-input-wrap" id="wrap-upi">
         <input type="text" id="f-upi" placeholder="your@upi or 9876543210@paytm" oninput="updatePreview()" />
       </div>
-
       <div class="toggle-row">
-        <div>
-          <div class="toggle-label">📱 WhatsApp Button</div>
-          <div class="toggle-sub">Direct chat link</div>
-        </div>
-        <label class="toggle">
-          <input type="checkbox" id="toggle-wa" onchange="toggleSpecial('wa')" />
-          <span class="toggle-slider"></span>
-        </label>
+        <div><div class="toggle-label">📱 WhatsApp Button</div><div class="toggle-sub">Direct chat link</div></div>
+        <label class="toggle"><input type="checkbox" id="toggle-wa" onchange="toggleSpecial('wa')" /><span class="toggle-slider"></span></label>
       </div>
       <div class="toggle-input-wrap" id="wrap-wa">
         <input type="text" id="f-wa" placeholder="10-digit mobile number" oninput="updatePreview()" />
       </div>
+      <!-- <div class="support-box">
+        <div class="sup-title">💬 Need help building your page?</div>
+        <a href="https://wa.me/917893553115" target="_blank"><span>📱</span> WhatsApp us — we reply fast!</a>
+      </div> -->
     </div>
 
-    <!-- LINKS TAB -->
     <div class="tab-content" id="tab-links">
       <div class="links-list" id="links-list"></div>
       <button class="btn-add-link" onclick="addLink()">+ Add Link</button>
     </div>
 
-    <!-- DESIGN TAB -->
     <div class="tab-content" id="tab-design">
       <div class="field">
         <label>Theme</label>
@@ -473,10 +199,9 @@
     </div>
   </div>
 
-  <!-- PREVIEW -->
   <div class="preview-panel">
     <div class="preview-label">Live Preview</div>
-    <div class="phone-mockup" style="position:relative">
+    <div class="phone-mockup">
       <div class="phone-notch"></div>
       <div class="phone-screen">
         <div id="preview-page">
@@ -491,64 +216,65 @@
   </div>
 </div>
 
+<!-- MOBILE PREVIEW MODAL -->
+<div class="preview-modal" id="preview-modal">
+  <div class="preview-modal-phone">
+    <div class="pn"></div>
+    <div class="preview-modal-screen">
+      <div id="modal-preview-page"></div>
+    </div>
+  </div>
+  <div class="preview-modal-actions">
+    <button class="btn-close-preview" onclick="closePreviewModal()">✕ Close Preview</button>
+    <a class="btn-feedback-wa"
+      href="https://wa.me/918185843878?text=Hey!%20I%20just%20previewed%20my%20LinkDesi%20page.%20Here%27s%20my%20feedback%3A"
+      target="_blank">💬 Share Feedback on WhatsApp</a>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
   const API_BASE = "https://income-stream-1-1.onrender.com";
-  // REPLACE with your Razorpay payment link
-//   const RAZORPAY_LINK = "https://rzp.io/rzp/KAPs35a";
-  const RAZORPAY_LINK = "https://rzp.io/rzp/s0Fr0Ur";
+  const RAZORPAY_LINK = "https://rzp.io/rzp/linkdesi";
 
   const themes = [
-    { bg: 'linear-gradient(135deg,#667eea,#764ba2)' },
-    { bg: 'linear-gradient(135deg,#f093fb,#f5576c)' },
-    { bg: 'linear-gradient(135deg,#4facfe,#00f2fe)' },
-    { bg: 'linear-gradient(135deg,#43e97b,#38f9d7)' },
-    { bg: 'linear-gradient(135deg,#fa709a,#fee140)' },
-    { bg: 'linear-gradient(135deg,#ff9a9e,#fecfef)' },
-    { bg: 'linear-gradient(135deg,#a18cd1,#fbc2eb)' },
-    { bg: 'linear-gradient(135deg,#ffecd2,#fcb69f)' },
-    { bg: 'linear-gradient(135deg,#2d3436,#636e72)' },
-    { bg: 'linear-gradient(135deg,#ff4d00,#ff8c00)' },
+    'linear-gradient(135deg,#667eea,#764ba2)',
+    'linear-gradient(135deg,#f093fb,#f5576c)',
+    'linear-gradient(135deg,#4facfe,#00f2fe)',
+    'linear-gradient(135deg,#43e97b,#38f9d7)',
+    'linear-gradient(135deg,#fa709a,#fee140)',
+    'linear-gradient(135deg,#ff9a9e,#fecfef)',
+    'linear-gradient(135deg,#a18cd1,#fbc2eb)',
+    'linear-gradient(135deg,#ffecd2,#fcb69f)',
+    'linear-gradient(135deg,#2d3436,#636e72)',
+    'linear-gradient(135deg,#ff4d00,#ff8c00)',
   ];
 
-  let currentTheme = 0;
-  let links = [];
-  let usernameAvailable = false;
-  let usernameTimer = null;
+  let currentTheme = 0, links = [], usernameTimer = null;
 
-  // Build themes
   const grid = document.getElementById('themes-grid');
-  themes.forEach((t, i) => {
+  themes.forEach((bg, i) => {
     const dot = document.createElement('div');
     dot.className = 'theme-dot' + (i === 0 ? ' active' : '');
-    dot.style.background = t.bg;
-    dot.onclick = () => selectTheme(i);
+    dot.style.background = bg;
+    dot.onclick = () => { currentTheme = i; document.querySelectorAll('.theme-dot').forEach((d,j) => d.classList.toggle('active', j===i)); updatePreview(); };
     grid.appendChild(dot);
   });
 
-  function selectTheme(i) {
-    currentTheme = i;
-    document.querySelectorAll('.theme-dot').forEach((d, j) => d.classList.toggle('active', j === i));
-    updatePreview();
-  }
-
   function switchTab(name) {
-    document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', ['profile','links','design'][i] === name));
+    document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', ['profile','links','design'][i]===name));
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    document.getElementById('tab-' + name).classList.add('active');
+    document.getElementById('tab-'+name).classList.add('active');
   }
 
   function addLink() {
-    const id = Date.now();
-    links.push({ id, label: '', url: '' });
+    const id = Date.now(); links.push({id, label:'', url:''});
     renderLinks();
   }
 
   function removeLink(id) {
-    links = links.filter(l => l.id !== id);
-    renderLinks();
-    updatePreview();
+    links = links.filter(l => l.id!==id); renderLinks(); updatePreview();
   }
 
   function renderLinks() {
@@ -559,155 +285,126 @@
       div.className = 'link-item';
       div.innerHTML = `
         <button class="link-remove" onclick="removeLink(${link.id})">×</button>
-        <input type="text" placeholder="Button label (e.g. My YouTube)" value="${link.label}"
-          oninput="updateLink(${link.id},'label',this.value)" />
-        <input type="text" placeholder="URL (e.g. https://youtube.com/...)" value="${link.url}"
-          oninput="updateLink(${link.id},'url',this.value)" />
+        <input type="text" placeholder="Button label (e.g. My YouTube)" value="${link.label}" oninput="updateLink(${link.id},'label',this.value)" />
+        <input type="text" placeholder="URL (e.g. https://youtube.com/...)" value="${link.url}" oninput="updateLink(${link.id},'url',this.value)" />
       `;
       list.appendChild(div);
     });
   }
 
   function updateLink(id, field, val) {
-    const link = links.find(l => l.id === id);
-    if (link) link[field] = val;
-    updatePreview();
+    const l = links.find(l => l.id===id); if(l) l[field]=val; updatePreview();
   }
 
   function toggleSpecial(type) {
-    const checked = document.getElementById('toggle-' + type).checked;
-    document.getElementById('wrap-' + type).classList.toggle('active', checked);
+    const checked = document.getElementById('toggle-'+type).checked;
+    document.getElementById('wrap-'+type).classList.toggle('active', checked);
     updatePreview();
   }
 
-  // USERNAME CHECK
   function onUsernameInput() {
     const val = document.getElementById('f-username').value.trim().toLowerCase();
     document.getElementById('username-preview').textContent = val || 'yourname';
     document.getElementById('username-status').textContent = '';
-    usernameAvailable = false;
     clearTimeout(usernameTimer);
-    if (val.length >= 3) {
-      usernameTimer = setTimeout(() => checkUsername(val), 600);
-    }
+    if (val.length >= 3) usernameTimer = setTimeout(() => checkUsername(val), 600);
     updatePreview();
   }
 
-  async function checkUsername(username) {
+  async function checkUsername(u) {
     try {
-      const res = await fetch(`${API_BASE}/check/${username}`);
-      const data = await res.json();
-      usernameAvailable = data.available;
-      document.getElementById('username-status').textContent = data.available ? '✅' : '❌';
-    } catch(e) {
-      console.error(e);
-    }
+      const r = await fetch(`${API_BASE}/check/${u}`);
+      const d = await r.json();
+      document.getElementById('username-status').textContent = d.available ? '✅' : '❌';
+    } catch(e) {}
+  }
+
+  function getPreviewContent() {
+    const name  = document.getElementById('f-name').value || 'Your Name';
+    const bio   = document.getElementById('f-bio').value || 'Your bio goes here';
+    const emoji = document.getElementById('f-emoji').value || '😊';
+    const upiOn = document.getElementById('toggle-upi').checked;
+    const waOn  = document.getElementById('toggle-wa').checked;
+    const upi   = document.getElementById('f-upi').value;
+    const wa    = document.getElementById('f-wa').value;
+
+    let linksHTML = '';
+    links.forEach(l => { if(l.label) linksHTML += `<a class="preview-link" href="${l.url||'#'}" target="_blank">${l.label}</a>`; });
+    if (waOn && wa) linksHTML += `<a class="preview-link whatsapp">📱 WhatsApp Me</a>`;
+    if (upiOn && upi) linksHTML += `<a class="preview-link upi">💸 Pay via UPI</a>`;
+
+    return { name, bio, emoji, linksHTML, bg: themes[currentTheme] };
+  }
+
+  function renderInto(container, data) {
+    container.style.background = data.bg;
+    container.innerHTML = `
+      <div class="preview-avatar">${data.emoji}</div>
+      <div class="preview-name">${data.name}</div>
+      <div class="preview-bio">${data.bio}</div>
+      <div style="width:100%">${data.linksHTML}</div>
+      <div class="preview-footer">linkdesi.in/${document.getElementById('f-username').value||'yourname'}</div>
+    `;
   }
 
   function updatePreview() {
-    const name    = document.getElementById('f-name').value || 'Your Name';
-    const bio     = document.getElementById('f-bio').value || 'Your bio goes here';
-    const emoji   = document.getElementById('f-emoji').value || '😊';
-    const username = document.getElementById('f-username').value || 'yourname';
-    const upiOn   = document.getElementById('toggle-upi').checked;
-    const waOn    = document.getElementById('toggle-wa').checked;
-    const upi     = document.getElementById('f-upi').value;
-    const wa      = document.getElementById('f-wa').value;
-
-    document.getElementById('prev-avatar').textContent = emoji;
-    document.getElementById('prev-name').textContent = name;
-    document.getElementById('prev-bio').textContent = bio;
-    document.getElementById('preview-page').style.background = themes[currentTheme].bg;
-
-    const linksEl = document.getElementById('prev-links');
-    linksEl.innerHTML = '';
-
-    links.forEach(link => {
-      if (!link.label) return;
-      const a = document.createElement('a');
-      a.className = 'preview-link';
-      a.textContent = link.label;
-      a.href = link.url || '#';
-      a.target = '_blank';
-      linksEl.appendChild(a);
-    });
-
-    if (waOn && wa) {
-      const a = document.createElement('a');
-      a.className = 'preview-link whatsapp';
-      a.textContent = '📱 WhatsApp Me';
-      linksEl.appendChild(a);
-    }
-
-    if (upiOn && upi) {
-      const a = document.createElement('a');
-      a.className = 'preview-link upi';
-      a.textContent = '💸 Pay via UPI';
-      linksEl.appendChild(a);
-    }
+    renderInto(document.getElementById('preview-page'), getPreviewContent());
   }
 
-  function showToast(msg, isError = false) {
+  function openPreviewModal() {
+    const mp = document.getElementById('modal-preview-page');
+    mp.style.cssText = 'height:100%; overflow-y:auto; padding:40px 20px 24px; display:flex; flex-direction:column; align-items:center;';
+    renderInto(mp, getPreviewContent());
+    document.getElementById('preview-modal').classList.add('active');
+  }
+
+  function closePreviewModal() {
+    document.getElementById('preview-modal').classList.remove('active');
+  }
+
+  function showToast(msg, isError=false) {
     const t = document.getElementById('toast');
     t.textContent = msg;
-    t.className = 'toast show' + (isError ? ' error' : '');
-    setTimeout(() => t.className = 'toast', 3000);
+    t.className = 'toast show' + (isError?' error':'');
+    setTimeout(() => t.className='toast', 3000);
   }
 
   async function saveAndPublish() {
     const username = document.getElementById('f-username').value.trim().toLowerCase();
     const name     = document.getElementById('f-name').value.trim();
-    const upiOn    = document.getElementById('toggle-upi').checked;
-    const waOn     = document.getElementById('toggle-wa').checked;
-
     if (!username || username.length < 3) return showToast('⚠ Enter a username (min 3 chars)', true);
     if (!name) return showToast('⚠ Enter your display name', true);
 
     const btn = document.getElementById('publish-btn');
-    btn.disabled = true;
-    btn.textContent = 'Saving...';
+    btn.disabled = true; btn.textContent = 'Saving...';
 
     try {
       const payload = {
-        username,
-        name,
+        username, name,
         bio: document.getElementById('f-bio').value,
         emoji: document.getElementById('f-emoji').value || '😊',
         theme_index: currentTheme,
-        links: links.filter(l => l.label).map(l => ({ label: l.label, url: l.url })),
-        upi_id: upiOn ? document.getElementById('f-upi').value : '',
-        whatsapp: waOn ? document.getElementById('f-wa').value : '',
+        links: links.filter(l=>l.label).map(l=>({label:l.label, url:l.url})),
+        upi_id: document.getElementById('toggle-upi').checked ? document.getElementById('f-upi').value : '',
+        whatsapp: document.getElementById('toggle-wa').checked ? document.getElementById('f-wa').value : '',
       };
 
       const res = await fetch(`${API_BASE}/page`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
       });
 
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.detail || 'Save failed');
-      }
+      if (!res.ok) { const e=await res.json(); throw new Error(e.detail||'Save failed'); }
 
       showToast('✅ Saved! Redirecting to payment...');
-
-      // Store username so we can activate after payment
       localStorage.setItem('pending_username', username);
-
-      // Redirect to Razorpay after short delay
-      setTimeout(() => {
-        window.location.href = RAZORPAY_LINK;
-      }, 1500);
+      setTimeout(() => { window.location.href = RAZORPAY_LINK + `?notes[username]=${username}`;; }, 1500);
 
     } catch(e) {
-      showToast('⚠ ' + e.message, true);
-      btn.disabled = false;
-      btn.textContent = 'Publish — ₹149/mo';
+      showToast('⚠ '+e.message, true);
+      btn.disabled=false; btn.textContent='Publish — ₹99/mo';
     }
   }
 
-  // Init
   addLink();
   updatePreview();
 </script>

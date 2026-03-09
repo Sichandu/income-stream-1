@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LinkDesi</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { margin:0; padding:0; box-sizing:border-box; }
 
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
@@ -14,102 +14,218 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      padding: 48px 20px 32px;
+      position: relative;
+      overflow-x: hidden;
     }
 
+    /* ANIMATED BACKGROUND */
+    .bg-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      transition: background 0.5s ease;
+    }
+
+    .bg-layer::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.18);
+    }
+
+    /* GLASS NOISE OVERLAY */
+    .bg-layer::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* FLOATING BLOBS */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.35;
+      pointer-events: none;
+      z-index: 0;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .blob-1 { width: 400px; height: 400px; top: -100px; right: -100px; background: rgba(255,255,255,0.2); animation-delay: 0s; }
+    .blob-2 { width: 300px; height: 300px; bottom: -80px; left: -80px; background: rgba(255,255,255,0.15); animation-delay: -3s; }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(20px, -20px) scale(1.05); }
+    }
+
+    /* MAIN CONTENT */
     .page-wrap {
+      position: relative;
+      z-index: 10;
       width: 100%;
-      max-width: 420px;
+      max-width: 480px;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
+      padding: 56px 24px 40px;
+    }
+
+    /* AVATAR */
+    .avatar-ring {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .avatar-ring::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      backdrop-filter: blur(4px);
     }
 
     .avatar {
-      width: 88px;
-      height: 88px;
+      position: relative;
+      width: 96px;
+      height: 96px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(8px);
+      border: 2px solid rgba(255,255,255,0.5);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 44px;
-      margin-bottom: 14px;
-      border: 3px solid rgba(255,255,255,0.4);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      font-size: 48px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.4);
     }
 
+    /* NAME & BIO */
     .display-name {
-      font-size: 22px;
+      font-size: 24px;
       font-weight: 800;
       color: white;
-      margin-bottom: 6px;
       text-align: center;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      letter-spacing: -0.02em;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.2);
+      margin-bottom: 8px;
     }
 
     .bio {
       font-size: 14px;
       color: rgba(255,255,255,0.8);
       text-align: center;
-      margin-bottom: 28px;
-      line-height: 1.6;
-      max-width: 300px;
+      line-height: 1.7;
+      max-width: 320px;
+      margin-bottom: 36px;
     }
 
-    .links-wrap { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+    /* LINKS */
+    .links-wrap {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
 
     .link-btn {
       width: 100%;
-      padding: 14px 20px;
-      border-radius: 12px;
+      padding: 16px 24px;
+      border-radius: 16px;
       font-size: 15px;
       font-weight: 600;
       text-align: center;
-      background: rgba(255,255,255,0.2);
       color: white;
-      border: 1px solid rgba(255,255,255,0.3);
-      cursor: pointer;
       text-decoration: none;
-      display: block;
-      transition: all 0.2s;
-      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+
+      /* Glass morphism */
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.3);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.3);
     }
 
-    .link-btn:hover {
-      background: rgba(255,255,255,0.35);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    .link-btn::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      transition: left 0.4s ease;
     }
 
-    .link-btn.whatsapp { background: #25D366; border-color: #25D366; }
-    .link-btn.whatsapp:hover { background: #20b858; }
-    .link-btn.upi { background: #6739b7; border-color: #6739b7; }
-    .link-btn.upi:hover { background: #5a31a0; }
+    .link-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3); }
+    .link-btn:hover::before { left: 100%; }
+    .link-btn:active { transform: translateY(-1px); }
 
+    .link-btn.whatsapp {
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      border-color: rgba(255,255,255,0.2);
+      box-shadow: 0 4px 20px rgba(37,211,102,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+    }
+
+    .link-btn.whatsapp:hover { box-shadow: 0 12px 32px rgba(37,211,102,0.5); }
+
+    .link-btn.upi {
+      background: linear-gradient(135deg, #6739b7, #9c27b0);
+      border-color: rgba(255,255,255,0.2);
+      box-shadow: 0 4px 20px rgba(103,57,183,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+    }
+
+    .link-btn.upi:hover { box-shadow: 0 12px 32px rgba(103,57,183,0.5); }
+
+    .link-icon { font-size: 18px; flex-shrink: 0; }
+
+    /* FOOTER */
     .footer {
-      margin-top: 40px;
-      font-size: 12px;
-      color: rgba(255,255,255,0.4);
+      margin-top: auto;
+      padding-top: 40px;
       text-align: center;
     }
 
-    .footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
-    .footer a:hover { color: white; }
+    .footer a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.45);
+      text-decoration: none;
+      transition: color 0.2s;
+      font-weight: 500;
+    }
+
+    .footer a:hover { color: rgba(255,255,255,0.75); }
 
     /* LOADING */
     .loading {
+      position: relative;
+      z-index: 10;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
+      min-height: 100vh;
       gap: 16px;
-      color: rgba(255,255,255,0.7);
+      color: white;
       font-size: 14px;
     }
 
     .spinner {
-      width: 36px; height: 36px;
+      width: 40px; height: 40px;
       border: 3px solid rgba(255,255,255,0.2);
       border-top-color: white;
       border-radius: 50%;
@@ -120,34 +236,65 @@
 
     /* NOT FOUND */
     .not-found {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
       text-align: center;
+      padding: 24px;
       color: white;
     }
 
-    .not-found h2 { font-size: 28px; margin-bottom: 12px; }
-    .not-found p { font-size: 15px; color: rgba(255,255,255,0.7); margin-bottom: 24px; }
+    .not-found h2 { font-size: 32px; font-weight: 800; margin-bottom: 12px; }
+    .not-found p { font-size: 15px; color: rgba(255,255,255,0.7); margin-bottom: 28px; }
 
     .btn-create {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       background: white;
       color: #333;
       font-size: 14px;
       font-weight: 700;
-      padding: 12px 28px;
+      padding: 14px 28px;
       border-radius: 100px;
       text-decoration: none;
       transition: all 0.2s;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
     }
 
-    .btn-create:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+    .btn-create:hover { transform: translateY(-2px); box-shadow: 0 16px 32px rgba(0,0,0,0.25); }
+
+    /* ENTRANCE ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .avatar-ring { animation: fadeUp 0.5s ease 0.1s both; }
+    .display-name { animation: fadeUp 0.5s ease 0.2s both; }
+    .bio { animation: fadeUp 0.5s ease 0.3s both; }
+    .link-btn:nth-child(1) { animation: fadeUp 0.5s ease 0.35s both; }
+    .link-btn:nth-child(2) { animation: fadeUp 0.5s ease 0.4s both; }
+    .link-btn:nth-child(3) { animation: fadeUp 0.5s ease 0.45s both; }
+    .link-btn:nth-child(4) { animation: fadeUp 0.5s ease 0.5s both; }
+    .link-btn:nth-child(5) { animation: fadeUp 0.5s ease 0.55s both; }
+    .link-btn:nth-child(6) { animation: fadeUp 0.5s ease 0.6s both; }
   </style>
 </head>
 <body>
 
-<div class="page-wrap" id="page-wrap">
+<div class="bg-layer" id="bg-layer"></div>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<div id="root">
   <div class="loading">
     <div class="spinner"></div>
-    <span>Loading...</span>
+    <span>Loading your page...</span>
   </div>
 </div>
 
@@ -167,88 +314,108 @@
     'linear-gradient(135deg,#ff4d00,#ff8c00)',
   ];
 
-  // Get username from URL: /page.html?u=priyamusic
+  const linkIcons = {
+    youtube: '▶️', instagram: '📸', twitter: '🐦', spotify: '🎵',
+    facebook: '📘', linkedin: '💼', telegram: '✈️', website: '🌐',
+  };
+
+  function getIcon(url, label) {
+    const u = (url + label).toLowerCase();
+    for (const [key, icon] of Object.entries(linkIcons)) {
+      if (u.includes(key)) return icon;
+    }
+    return '🔗';
+  }
+
+  function escHtml(str) {
+    return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
   const params = new URLSearchParams(window.location.search);
   const username = params.get('u');
 
   async function loadPage() {
-    const wrap = document.getElementById('page-wrap');
+    const root = document.getElementById('root');
 
-    if (!username) {
-      showNotFound(wrap);
-      return;
-    }
+    if (!username) { showNotFound(); return; }
 
     try {
       const res = await fetch(`${API_BASE}/page/${username}`);
-
-      if (!res.ok) {
-        showNotFound(wrap);
-        return;
-      }
-
+      if (!res.ok) { showNotFound(); return; }
       const data = await res.json();
-      renderPage(wrap, data);
-
+      renderPage(data);
     } catch(e) {
-      showNotFound(wrap);
+      showNotFound();
     }
   }
 
-  function renderPage(wrap, data) {
+  function renderPage(data) {
     // Set background
-    document.body.style.background = themes[data.theme_index || 0];
-
-    // Update page title
+    const bg = themes[data.theme_index || 0];
+    document.getElementById('bg-layer').style.background = bg;
     document.title = `${data.name} | LinkDesi`;
 
-    let html = `
-      <div class="avatar">${data.emoji || '😊'}</div>
-      <div class="display-name">${escHtml(data.name)}</div>
-      <div class="bio">${escHtml(data.bio || '')}</div>
-      <div class="links-wrap">
-    `;
-
-    // Regular links
-    const links = data.links || [];
-    links.forEach(link => {
-      if (!link.label) return;
-      html += `<a class="link-btn" href="${escHtml(link.url)}" target="_blank" rel="noopener">${escHtml(link.label)}</a>`;
+    // Update blob colors based on theme
+    document.querySelectorAll('.blob').forEach(b => {
+      b.style.background = 'rgba(255,255,255,0.15)';
     });
 
-    // WhatsApp
+    const links = data.links || [];
+    let linksHTML = '';
+
+    links.forEach(link => {
+      if (!link.label) return;
+      const icon = getIcon(link.url||'', link.label);
+      linksHTML += `
+        <a class="link-btn" href="${escHtml(link.url||'#')}" target="_blank" rel="noopener">
+          <span class="link-icon">${icon}</span>
+          ${escHtml(link.label)}
+        </a>
+      `;
+    });
+
     if (data.whatsapp) {
-      const num = data.whatsapp.replace(/\D/g, '');
-      html += `<a class="link-btn whatsapp" href="https://wa.me/91${num}" target="_blank">📱 WhatsApp Me</a>`;
+      const num = data.whatsapp.replace(/\D/g,'');
+      linksHTML += `
+        <a class="link-btn whatsapp" href="https://wa.me/91${num}" target="_blank" rel="noopener">
+          <span class="link-icon">💬</span> WhatsApp Me
+        </a>
+      `;
     }
 
-    // UPI
     if (data.upi_id) {
-      html += `<a class="link-btn upi" href="upi://pay?pa=${encodeURIComponent(data.upi_id)}&pn=${encodeURIComponent(data.name)}">💸 Pay via UPI</a>`;
+      linksHTML += `
+        <a class="link-btn upi" href="upi://pay?pa=${encodeURIComponent(data.upi_id)}&pn=${encodeURIComponent(data.name)}">
+          <span class="link-icon">💸</span> Pay via UPI
+        </a>
+      `;
     }
 
-    html += `</div>
-      <div class="footer">
-        <a href="index.html">Create your free LinkDesi page →</a>
+    document.getElementById('root').innerHTML = `
+      <div class="page-wrap">
+        <div class="avatar-ring">
+          <div class="avatar">${escHtml(data.emoji||'😊')}</div>
+        </div>
+        <div class="display-name">${escHtml(data.name)}</div>
+        <div class="bio">${escHtml(data.bio||'')}</div>
+        <div class="links-wrap">${linksHTML}</div>
+        <div class="footer">
+          <a href="index.html">⚡ Create your free LinkDesi page</a>
+        </div>
       </div>
     `;
-
-    wrap.innerHTML = html;
   }
 
-  function showNotFound(wrap) {
-    document.body.style.background = 'linear-gradient(135deg,#667eea,#764ba2)';
-    wrap.innerHTML = `
+  function showNotFound() {
+    document.getElementById('bg-layer').style.background = 'linear-gradient(135deg,#667eea,#764ba2)';
+    document.getElementById('root').innerHTML = `
       <div class="not-found">
+        <div style="font-size:64px;margin-bottom:16px">🔍</div>
         <h2>Page not found</h2>
         <p>This page doesn't exist or hasn't been activated yet.</p>
-        <a href="index.html" class="btn-create">Create Your Page →</a>
+        <a href="index.html" class="btn-create">⚡ Create Your Page →</a>
       </div>
     `;
-  }
-
-  function escHtml(str) {
-    return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
   loadPage();
